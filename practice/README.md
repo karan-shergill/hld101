@@ -4,6 +4,7 @@
 | SNo | Design | Date | Time | Rating |
 |-----|--------|------|------|--------|
 | 1 | TinyURL | 17-01-2025 | 80 Mins | 6/10 |
+| 2 | Notification System | 18-01-2025 | 85 Mins | 6/10 |
 
 
 
@@ -12,3 +13,4 @@
 | SNo | Design | Date | Practice Count |
 |-----|--------|------|----------------|
 | 1 | TinyURL | `17-01-2025` | 1 |
+| 2 | Notification System | `18-01-2025` | 1 |
