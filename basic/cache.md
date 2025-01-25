@@ -302,3 +302,68 @@ Caching at every level of a system or architecture may sound like an effective s
 6. Cache Stampede and Redundant Fetches: Multiple layers may independently attempt to fetch the same data from the backend after a cache miss. Backend experiences a sudden surge in traffic.
 7. Difficulty in Cache Optimization: Fine-tuning TTLs, eviction policies, and caching strategies for each layer is non-trivial.
 8. Increased Debugging Difficulty: Debugging application behavior becomes harder when caches at different layers behave unexpectedly. More effort is required to identify the root cause of issues.
+
+## Qs for an Interview
+
+### Basic Understanding of Caching
+
+1. When would you choose not to use a cache in a system?
+2. Explain the difference between strong consistency, eventual consistency, and cache consistency. How would you handle consistency in a caching layer?
+3. How do you decide what data to cache in a system?
+
+### Caching Strategies and Policies
+
+1. What are the differences between write-through, write-back, and write-around caching? When would you use each?
+2. How do you design a cache eviction policy for a system with limited memory?
+3. Can you explain a situation where Least Recently Used (LRU) might not be the best eviction policy?
+
+### Designing Caching Layers
+
+1. How would you design a multi-layered caching system (e.g., CDN, in-memory cache, database cache) to optimize performance for a global user base?
+2. What are the trade-offs between in-memory caches (like Redis) and disk-based caches (like CDN edge caches)?
+3. How would you handle caching in a distributed system where nodes can go down or join dynamically?
+
+### Cache Consistency and Invalidation
+
+1. How would you design an efficient cache invalidation mechanism for a highly dynamic system where data changes frequently?
+2. What are the challenges of maintaining cache consistency in distributed systems?
+3. How would you implement cache invalidation for a multi-tenant application where users share common data?
+
+### Handling Caching Challenges
+
+1. How would you mitigate cache stampedes in a high-traffic system?
+2. What strategies would you use to handle a cold start problem in a caching layer?
+3. How do you prevent cache penetration in a system prone to malicious or random queries?
+4. What steps would you take to avoid a cache avalanche when a popular cached item expires?
+
+### Scalability and Performance
+
+1. How would you scale a caching layer to handle a billion requests per second?
+2. What are the limitations of horizontal scaling in distributed caches? How would you address them?
+3. How would you measure and monitor the effectiveness of a caching layer in a system?
+
+### Advanced Topics
+
+1. What is cache warming, and why is it important? How would you implement it?
+2. How does consistent hashing work, and why is it important for distributed caching systems?
+3. What are the pros and cons of using a caching layer versus a database index for query optimization?
+4. How would you implement caching in a microservices architecture with services communicating over HTTP or gRPC?
+5. How do CDNs implement caching policies at the edge, and what challenges do they face in maintaining freshness for globally distributed content?
+
+### Debugging and Real-World Scenarios
+
+1. How would you debug a cache inconsistency issue in a multi-level caching system?
+2. What would you do if a cache miss rate suddenly spikes in a production system?
+3. Imagine a scenario where the caching layer is slowing down the system instead of speeding it up. What could cause this, and how would you resolve it?
+
+### Scenario-Based Questions
+
+1. Design a caching strategy for a real-time messaging application like WhatsApp. How would you handle ephemeral messages and ensure consistent delivery?
+2. How would you use caching to improve the performance of a large-scale recommendation system?
+3. Describe how you would design a caching solution for an e-commerce website where prices and inventory frequently change.
+
+### Open-Ended Brainstorming
+
+1. What are some innovative uses of caching beyond traditional use cases like reducing latency or database load?
+2. How would you implement a cache for a system where some data must never be stale (e.g., financial transactions)?
+3. What trade-offs would you make when designing a cache for a system with limited memory, highly variable workloads, and high fault-tolerance requirements?
