@@ -1,5 +1,3 @@
-# Relational Database
-
 A relational database organizes data into **tables** (rows and columns) and uses a **structured schema** to define the relationships between those tables. It relies on **SQL (Structured Query Language)** for querying and managing the data.
 
 # Transaction
@@ -81,6 +79,42 @@ WHERE account_id = 'B';
 -- Commit the transaction if all operations succeed
 COMMIT;
 ```
+
+# How Database maintain Atomicity
+
+### Use of Transactions
+
+A **transaction** is a logical unit of work that includes one or more database operations (e.g., INSERT, UPDATE, DELETE). The database ensures that either:
+
+- All operations within the transaction are committed successfully, or
+- None of them are applied, and the database is rolled back to its previous state.
+
+### Write-Ahead Logging (WAL)
+
+Relational databases typically use a **Write-Ahead Log (WAL)** or similar mechanism to ensure atomicity:
+
+- **Before making any changes to the database**, the transaction's details are written to a **log file**.
+- If the database crashes during a transaction, the system uses the log to either:
+    - **Roll forward** completed operations if the transaction was committed, or
+    - **Roll back** changes if the transaction was incomplete.
+
+### Two-Phase Commit (2PC) for Distributed Systems
+
+For distributed databases or transactions spanning multiple nodes, **Two-Phase Commit (2PC)** ensures atomicity:
+
+1. **Prepare Phase**: Each participating node prepares the transaction and confirms readiness to commit.
+2. **Commit Phase**: If all nodes are ready, the transaction is committed across all nodes; otherwise, it is rolled back.
+
+### **Error Handling**
+
+If any part of a transaction encounters an error (e.g., constraint violations, deadlocks, or failed queries):
+
+- The database automatically **rolls back** all changes made during the transaction.
+- This ensures partial updates are not persisted.
+
+### **Database Locks**
+
+To maintain atomicity, relational databases often use locks to prevent changes by other transactions until the current transaction completes. This ensures that no partial updates are visible to other transactions.
 
 # Consistency: C in ACID
 
@@ -320,8 +354,7 @@ Choosing the right isolation level depends on the application’s requirements f
 
 **When to Use Read Committed**
 
-- Use when:
-    - You want to avoid dirty reads but can tolerate non-repeatable or phantom reads.
+- Use when: You want to avoid dirty reads but can tolerate non-repeatable or phantom reads.
 - Example: Most OLTP (Online Transaction Processing) systems, such as order management or ticket booking, where data accuracy during single reads is crucial.
 
 **When to Use Repeatable Read**
@@ -386,12 +419,9 @@ Databases implement durability using several techniques to ensure that committed
 1. **Write-Ahead Logging (WAL)**:
     - Before any changes are made to the database, the transaction details (such as which data was modified) are written to a **log file**. This log entry is stored on disk before the actual changes are applied to the database.
     - If a failure occurs, the database can replay the log to restore any committed transactions.
-2. **Transaction Journaling**:
-    - The database keeps a record (journal) of all committed transactions, ensuring that it can be replayed after recovery, so no data is lost.
-3. **Database Checkpoints**:
-    - Periodically, the database will create a **checkpoint** where the state of the database is saved to disk. If a crash happens, the database can roll back to the last checkpoint and replay the transaction logs from that point to ensure durability.
-4. **Replication**:
-    - In some setups, **data replication** ensures that data is replicated to multiple servers. Even if one server crashes, the data will be available from another server.
+2. **Transaction Journaling**: The database keeps a record (journal) of all committed transactions, ensuring that it can be replayed after recovery, so no data is lost.
+3. **Database Checkpoints**: Periodically, the database will create a **checkpoint** where the state of the database is saved to disk. If a crash happens, the database can roll back to the last checkpoint and replay the transaction logs from that point to ensure durability.
+4. **Replication**: In some setups, **data replication** ensures that data is replicated to multiple servers. Even if one server crashes, the data will be available from another server.
 
 # Scaling Relational Database
 
@@ -652,6 +682,76 @@ In a **distributed banking system**, a money transfer transaction may be replica
 - **Efficient Sorting**: Indexes help with sorting operations. Queries that order results (e.g., `ORDER BY`) can be much faster when indexes are in place.
 - **Faster Joins**: Indexing is important for optimizing joins, as the database can quickly find matching rows in different tables.
 - **Reduces I/O Operations**: Since indexes allow the database to quickly locate data, it minimizes the number of disk reads, which leads to a decrease in overall I/O operations.
+
+# Relational database horizontal scaling chalenges
+
+Relational databases **don’t scale well horizontally** because of their **strong consistency requirements**, **complex joins**, and **ACID compliance**. While modern solutions like sharding and distributed SQL databases help with horizontal scaling, traditional relational databases face several challenges when distributed across multiple nodes.
+
+### **Challenges in Horizontally Scaling Relational Databases**
+
+**1. ACID Transactions Across Nodes**
+
+- Relational databases ensure **Atomicity, Consistency, Isolation, and Durability (ACID)**.
+- When data is split across multiple servers (shards), enforcing ACID transactions across nodes becomes difficult.
+- **Example:** A bank transfer between accounts in different shards requires distributed transactions, which slow down performance and increase failure risks.
+
+**2. Complexity of Joins Across Nodes**
+
+- Relational databases rely on **joins** to combine data across multiple tables.
+- When data is spread across multiple nodes, performing a join requires:
+    - Fetching data from multiple nodes.
+    - Coordinating and merging the results.
+    - This leads to **high latency** and **network overhead**.
+- **Example:** An e-commerce website where **users** are on one shard and **orders** on another—joining them across shards can degrade performance.
+
+**3. Sharding and Partitioning Complexity**
+
+- **Sharding** is the most common horizontal scaling approach but introduces challenges:
+    - Choosing a **good shard key** is difficult. If not done properly, it leads to **hotspots** where some shards handle more load than others.
+    - Some queries (like range queries) become inefficient if data is distributed across multiple shards.
+- **Example:** If an online store shards by **user ID**, a report that needs total sales across all users will need to query every shard.
+
+**4. Distributed Consistency and Replication Issues**
+
+- Relational databases typically use **strong consistency**, meaning every read sees the latest write.
+- In a distributed system, ensuring strong consistency leads to:
+    - **Increased latency** due to coordination between nodes.
+    - **Reduced availability** if some nodes fail.
+- Many NoSQL databases favor **eventual consistency** to avoid these problems.
+
+**5. Increased Operational Complexity**
+
+- Managing multiple relational database instances (e.g., replication, failover, and data migrations) is **more complex** than managing a single monolithic instance.
+- Adding new shards often requires **data rebalancing**, which is costly and time-consuming.
+
+### **How Some Relational Databases Overcome This**
+
+1. **Read Replicas**: Handle read-heavy workloads by distributing reads across multiple replicas.
+2. **Sharding (Carefully Designed)**: Databases like MySQL, PostgreSQL (Citus), and Amazon Aurora use **sharding frameworks** to distribute data efficiently.
+3. **Distributed SQL Databases**: Newer databases like **Google Spanner, YugabyteDB, and CockroachDB** aim to provide **SQL-like consistency with horizontal scalability**.
+
+# Popular Relational Databases & When to Use Them
+
+| Use Case | Best Database |
+| --- | --- |
+| **General web apps (CMS, blogs, small e-commerce)** | MySQL, MariaDB |
+| **Enterprise applications & analytics** | SQL Server, Oracle, IBM Db2 |
+| **Highly scalable & flexible apps** | PostgreSQL, Google Cloud Spanner |
+| **Cloud-based applications** | Amazon Aurora, Google Cloud Spanner |
+| **Banking & financial transactions** | Oracle, SQL Server, PostgreSQL |
+| **Global distributed apps (multi-region transactions)** | Cloud Spanner, Amazon Aurora |
+
+The best relational database depends on:
+
+- **Scalability Needs:** PostgreSQL for flexibility, Cloud Spanner for global apps
+- **Enterprise Support:** SQL Server, Oracle, or Db2 for mission-critical apps
+- **Cloud-Native Solutions:** Amazon Aurora, Google Spanner for managed scalability
+
+For a real-world use case, imagine building a **global e-commerce platform** like Amazon:
+
+- **Primary database:** PostgreSQL (for scalability & flexibility)
+- **Read replicas:** MySQL/Aurora (to handle massive read traffic)
+- **Analytics:** BigQuery (for customer insights)
 
 # Stages of Database Scaling: From 100 Users to 1 Billion Users
 
