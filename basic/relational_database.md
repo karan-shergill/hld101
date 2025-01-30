@@ -1,76 +1,75 @@
+# Table of contents
+
 - [Transaction](#transaction)
-    + [How a Transaction Works](#how-a-transaction-works)
-    + [Example](#example)
-    + [**Types of Transactions**](#--types-of-transactions--)
-    + [**Transactions Real-World Examples**](#--transactions-real-world-examples--)
-- [Atomicity: A in ACID](#atomicity--a-in-acid)
-    + [Key Points About Atomicity](#key-points-about-atomicity)
-    + [**Real-Life Importance of Atomicity**](#--real-life-importance-of-atomicity--)
-    + [SQL example](#sql-example)
+    - [How a Transaction Works](#how-a-transaction-works)
+    - [Example](#example)
+    - [Types of Transactions](#types-of-transactions)
+    - [Transactions Real-World Examples](#transactions-real-world-examples)
+- [Atomicity: A in ACID](#atomicity-a-in-acid)
+    - [Key Points About Atomicity](#key-points-about-atomicity)
+    - [Real-Life Importance of Atomicity](#real-life-importance-of-atomicity)
+    - [SQL example](#sql-example)
 - [How Database maintain Atomicity](#how-database-maintain-atomicity)
-    + [Use of Transactions](#use-of-transactions)
-    + [Write-Ahead Logging (WAL)](#write-ahead-logging--wal-)
-    + [Two-Phase Commit (2PC) for Distributed Systems](#two-phase-commit--2pc--for-distributed-systems)
-    + [**Error Handling**](#--error-handling--)
-    + [**Database Locks**](#--database-locks--)
-- [Consistency: C in ACID](#consistency--c-in-acid)
-    + [**Key Points About Consistency**](#--key-points-about-consistency--)
-    + [**Example of Consistency**](#--example-of-consistency--)
-    + [SQL Example](#sql-example)
-- [Constraints, Triggers, and Cascades in Consistency (C of ACID)](#constraints--triggers--and-cascades-in-consistency--c-of-acid-)
-    + [Constraints](#constraints)
-    + [Triggers](#triggers)
-    + [Cascades](#cascades)
-- [Isolation: I in ACID](#isolation--i-in-acid)
-    + [**Key Points About Isolation**](#--key-points-about-isolation--)
-    + [**Issues Addressed by Isolation**](#--issues-addressed-by-isolation--)
-    + [**Isolation Levels**](#--isolation-levels--)
+    - [Use of Transactions](#use-of-transactions)
+    - [Write-Ahead Logging (WAL)](#write-ahead-logging-wal)
+    - [Two-Phase Commit (2PC) for Distributed Systems](#two-phase-commit-2pc-for-distributed-systems)
+    - [Error Handling](#error-handling)
+    - [Database Locks](#database-locks)
+- [Consistency: C in ACID](#consistency-c-in-acid)
+    - [Key Points About Consistency](#key-points-about-consistency)
+    - [Example of Consistency](#example-of-consistency)
+    - [SQL Example](#sql-example)
+- [Constraints, Triggers, and Cascades in Consistency (C of ACID)](#constraints-triggers-and-cascades-in-consistency-c-of-acid)
+    - [Constraints](#constraints)
+    - [Triggers](#triggers)
+    - [Cascades](#cascades)
+- [Isolation: I in ACID](#isolation-i-in-acid)
+    - [Key Points About Isolation](#key-points-about-isolation)
+    - [Issues Addressed by Isolation](#issues-addressed-by-isolation)
+    - [Isolation Levels](#isolation-levels)
 - [Understanding Isolation Levels in Detail](#understanding-isolation-levels-in-detail)
-    + [**Choosing the Right Isolation Level**](#--choosing-the-right-isolation-level--)
-    + [**Throughput and Latency at Each Isolation Level**](#--throughput-and-latency-at-each-isolation-level--)
-    + [**Isolation levels** and **locks**](#--isolation-levels---and---locks--)
-- [Durability: D of ACID](#durability--d-of-acid)
-    + [**How Durability Is Implemented**](#--how-durability-is-implemented--)
+    - [Choosing the Right Isolation Level](#choosing-the-right-isolation-level)
+    - [**Throughput and Latency at Each Isolation Level**](#throughput-and-latency-at-each-isolation-level)
+    - [**Isolation levels** and **locks**](#isolation-levels-and-locks)
+- [Durability: D of ACID](#durability-d-of-acid)
+    - [How Durability Is Implemented](#how-durability-is-implemented)
 - [Scaling Relational Database](#scaling-relational-database)
-    + [**Vertical Scaling (Scaling Up)**](#--vertical-scaling--scaling-up---)
-    + [**Horizontal Scaling (Scaling Out)**](#--horizontal-scaling--scaling-out---)
-- [**Types of Horizontal Scaling in Databases**](#--types-of-horizontal-scaling-in-databases--)
-    + [Replication](#replication)
-    + [Sharding](#sharding)
-    + [Partitioning](#partitioning)
-    + [**When to Use Each Scaling Technique**](#--when-to-use-each-scaling-technique--)
-    + [**Real-Life Examples of Horizontal Scaling**](#--real-life-examples-of-horizontal-scaling--)
-- [Scaling relational databases horizontally while maintaining **ACID**](#scaling-relational-databases-horizontally-while-maintaining---acid--)
-    + [Atomicity](#atomicity)
-    + [Consistency](#consistency)
-    + [Isolation](#isolation)
-    + [Durability](#durability)
-    + [Conclusion: Maintaining ACID in Horizontally Scaled Relational Databases](#conclusion--maintaining-acid-in-horizontally-scaled-relational-databases)
+    - [Vertical Scaling (Scaling Up)](#vertical-scaling-scaling-up)
+    - [Horizontal Scaling (Scaling Out)](#horizontal-scaling-scaling-out)
+- [Types of Horizontal Scaling in Databases](#types-of-horizontal-scaling-in-databases)
+    - [Replication](#replication)
+    - [Sharding](#sharding)
+    - [Partitioning](#partitioning)
+    - [When to Use Each Scaling Technique](#when-to-use-each-scaling-technique)
+    - [Real-Life Examples of Horizontal Scaling](#real-life-examples-of-horizontal-scaling)
+- [Scaling relational databases horizontally while maintaining **ACID**](#scaling-relational-databases-horizontally-while-maintaining-acid)
+    - [Atomicity](#atomicity)
+    - [Consistency](#consistency)
+    - [Isolation](#isolation)
+    - [Durability](#durability)
+    - [Conclusion: Maintaining ACID in Horizontally Scaled Relational Databases](#conclusion-maintaining-acid-in-horizontally-scaled-relational-databases)
 - [Indexing in Databases](#indexing-in-databases)
-    + [**Importance of Indexing**](#--importance-of-indexing--)
+    - [**Importance of Indexing**](#importance-of-indexing)
 - [Relational database horizontal scaling chalenges](#relational-database-horizontal-scaling-chalenges)
-    + [**Challenges in Horizontally Scaling Relational Databases**](#--challenges-in-horizontally-scaling-relational-databases--)
-    + [**How Some Relational Databases Overcome This**](#--how-some-relational-databases-overcome-this--)
-- [Popular Relational Databases & When to Use Them](#popular-relational-databases---when-to-use-them)
-- [Stages of Database Scaling: From 100 Users to 1 Billion Users](#stages-of-database-scaling--from-100-users-to-1-billion-users)
-    + [Stage 1: Initial Setup (100 Users)](#stage-1--initial-setup--100-users-)
-    + [**Stage 2: Growth to Thousands of Users**](#--stage-2--growth-to-thousands-of-users--)
-    + [**Stage 3: Growth to Tens of Thousands of Users**](#--stage-3--growth-to-tens-of-thousands-of-users--)
-    + [**Stage 4: Growth to Hundreds of Thousands of Users**](#--stage-4--growth-to-hundreds-of-thousands-of-users--)
-    + [**Stage 5: Scaling to Millions of Users**](#--stage-5--scaling-to-millions-of-users--)
-    + [**Stage 6: Scaling to Billions of Users**](#--stage-6--scaling-to-billions-of-users--)
-    + [**Summary of Database Scaling Strategy for 1 Billion Users**](#--summary-of-database-scaling-strategy-for-1-billion-users--)
-    + [**Tuning ACID Properties at Scale**](#--tuning-acid-properties-at-scale--)
+    - [Challenges in Horizontally Scaling Relational Databases](#challenges-in-horizontally-scaling-relational-databases)
+    - [How Some Relational Databases Overcome This](#how-some-relational-databases-overcome-this)
+- [Popular Relational Databases & When to Use Them](#popular-relational-databases--when-to-use-them)
+- [Stages of Database Scaling: From 100 Users to 1 Billion Users](#stages-of-database-scaling-from-100-users-to-1-billion-users)
+    - [Stage 1: Initial Setup (100 Users)](#stage-1-initial-setup-100-users)
+    - [Stage 2: Growth to Thousands of Users](#stage-2-growth-to-thousands-of-users)
+    - [Stage 3: Growth to Tens of Thousands of Users](#stage-3-growth-to-tens-of-thousands-of-users)
+    - [Stage 4: Growth to Hundreds of Thousands of Users](#stage-4-growth-to-hundreds-of-thousands-of-users)
+    - [Stage 5: Scaling to Millions of Users](#stage-5-scaling-to-millions-of-users)
+    - [Stage 6: Scaling to Billions of Users](#stage-6-scaling-to-billions-of-users)
+    - [Summary of Database Scaling Strategy for 1 Billion Users](#summary-of-database-scaling-strategy-for-1-billion-users)
+    - [Tuning ACID Properties at Scale](#tuning-acid-properties-at-scale)
 - [Qs for an Interview](#qs-for-an-interview)
-    + [Scaling and Performance](#scaling-and-performance)
-    + [Consistency, Availability, and Partition Tolerance](#consistency--availability--and-partition-tolerance)
-    + [Advanced and Real-World Challenges](#advanced-and-real-world-challenges)
-    + [Operational Challenges](#operational-challenges)
-    + [**Open-Ended Design Questions**](#--open-ended-design-questions--)
-    + [**Hypothetical Situations**](#--hypothetical-situations--)
-
-<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
-
+    - [Scaling and Performance](#scaling-and-performance)
+    - [Consistency, Availability, and Partition Tolerance](#consistency-availability-and-partition-tolerance)
+    - [Advanced and Real-World Challenges](#advanced-and-real-world-challenges)
+    - [Operational Challenges](#operational-challenges)
+    - [Open-Ended Design Questions](#open-ended-design-questions)
+    - [Hypothetical Situations](#hypothetical-situations)
 
 A relational database organizes data into **tables** (rows and columns) and uses a **structured schema** to define the relationships between those tables. It relies on **SQL (Structured Query Language)** for querying and managing the data.
 
@@ -106,12 +105,12 @@ COMMIT;
 -- One can keep the check & business logic in service as well 
 ```
 
-### **Types of Transactions**
+### Types of Transactions
 
 1. **Single Transaction**: One operation (e.g., inserting a record).
 2. **Batch Transaction**: Multiple operations grouped together.
 
-### **Transactions Real-World Examples**
+### Transactions Real-World Examples
 
 1. **E-commerce**: Place an order only if payment is successful and inventory is available.
 2. **Ticket Booking**: Reserve a seat and confirm payment as a single transaction.
@@ -129,7 +128,7 @@ The **A in ACID** stands for **Atomicity**. It ensures that a database transacti
 2. If any part of the transaction fails (e.g., due to a crash or error), the database will roll back all changes made during the transaction.
 3. Atomicity ensures **no partial updates** are applied to the database, maintaining data integrity.
 
-### **Real-Life Importance of Atomicity**
+### Real-Life Importance of Atomicity
 
 - **E-commerce**: Deduct inventory stock only if the payment is successful.
 - **Ticket Booking**: Reserve a seat only if payment is confirmed; otherwise, release it for others.
@@ -179,14 +178,14 @@ For distributed databases or transactions spanning multiple nodes, **Two-Phase C
 1. **Prepare Phase**: Each participating node prepares the transaction and confirms readiness to commit.
 2. **Commit Phase**: If all nodes are ready, the transaction is committed across all nodes; otherwise, it is rolled back.
 
-### **Error Handling**
+### Error Handling
 
 If any part of a transaction encounters an error (e.g., constraint violations, deadlocks, or failed queries):
 
 - The database automatically **rolls back** all changes made during the transaction.
 - This ensures partial updates are not persisted.
 
-### **Database Locks**
+### Database Locks
 
 To maintain atomicity, relational databases often use locks to prevent changes by other transactions until the current transaction completes. This ensures that no partial updates are visible to other transactions.
 
@@ -194,7 +193,7 @@ To maintain atomicity, relational databases often use locks to prevent changes b
 
 The **C in ACID** stands for **Consistency**. It ensures that a database moves from one **valid state** to another after a transaction is completed. Consistency guarantees that **rules, constraints, and integrity of the database are not violated** at any point.
 
-### **Key Points About Consistency**
+### Key Points About Consistency
 
 1. Consistency ensures that all data written to the database complies with predefined rules, such as:
     - Primary key constraints.
@@ -204,7 +203,7 @@ The **C in ACID** stands for **Consistency**. It ensures that a database moves f
 2. If a transaction violates any constraint, it is **rolled back**, and the database remains in its original state.
 3. Consistency depends on the database schema, constraints, and logic defined during design.
 
-### **Example of Consistency**
+### Example of Consistency
 
 **Scenario: E-commerce Inventory Management**
 
@@ -359,13 +358,13 @@ CREATE TABLE Orders (
 
 The **I in ACID** stands for **Isolation**. It ensures that **concurrent transactions** are executed independently, without interfering with each other, and that the final result is the same as if the transactions were executed sequentially (one after the other). This prevents issues like dirty reads, lost updates, or inconsistent data caused by simultaneous access.
 
-### **Key Points About Isolation**
+### Key Points About Isolation
 
 1. Transactions run as if they are the **only transaction** in the system.
 2. The level of isolation determines how visible the changes from one transaction are to others before completion.
 3. Isolation helps maintain consistency and prevents race conditions in a multi-user environment.
 
-### **Issues Addressed by Isolation**
+### Issues Addressed by Isolation
 
 1. **Dirty Read**: A **dirty read** happens when a transaction reads data that has been modified by another transaction but not yet committed. If the other transaction rolls back, the first transaction ends up using invalid or inconsistent data.
 2. **Non-Repeatable Read**: A **non-repeatable read** occurs when a transaction reads the same data multiple times during its execution but gets **different results** because another transaction modified the data in between.
@@ -378,7 +377,7 @@ The **I in ACID** stands for **Isolation**. It ensures that **concurrent transac
 | **Non-Repeatable Read** | Re-reading a value that another transaction has modified and committed. | `SELECT stock FROM Products` | **Repeatable Read** |
 | **Phantom Read** | Re-reading rows that have been added/removed by another transaction. | `SELECT SUM(salary) FROM Employees` | **Serializable** |
 
-### **Isolation Levels**
+### Isolation Levels
 
 Relational databases implement isolation through **isolation levels** defined by the SQL standard:
 
@@ -415,7 +414,7 @@ Here's a detailed breakdown of isolation levels:
 | **Repeatable Read** | Ensures that if a transaction reads a value twice, it sees the same value both times. Prevents updates. | Dirty reads, Non-repeatable reads | Lower throughput |
 | **Serializable** | Ensures full isolation, as if transactions are executed sequentially. Prevents all conflicts. | Dirty reads, Non-repeatable reads, Phantom reads | **Lowest throughput (most overhead)** |
 
-### **Choosing the Right Isolation Level**
+### Choosing the Right Isolation Level
 
 Choosing the right isolation level depends on the application’s requirements for **consistency** and **performance**.
 
@@ -486,7 +485,7 @@ Durability guarantees that after a transaction has been completed and committed:
 - The changes made by the transaction are **permanent**.
 - Even if the system crashes or faces a failure immediately after the commit, the database will **recover** to the state it was in after the transaction was committed, without losing any committed data.
 
-### **How Durability Is Implemented**
+### How Durability Is Implemented
 
 Databases implement durability using several techniques to ensure that committed data is stored safely:
 
@@ -501,7 +500,7 @@ Databases implement durability using several techniques to ensure that committed
 
 Scaling a relational database refers to the process of making it capable of handling increasing loads, such as more data, more queries, or higher user traffic. Scaling can be achieved in two main ways: **Vertical Scaling** and **Horizontal Scaling**. Each approach has its own trade-offs and is suited to different types of workloads.
 
-### **Vertical Scaling (Scaling Up)**
+### Vertical Scaling (Scaling Up)
 
 **Vertical Scaling** involves adding more **resources (CPU, RAM, Storage)** to the **existing database server** to improve its performance. It's essentially about upgrading the hardware of the single machine running the database.
 
@@ -527,7 +526,7 @@ Scaling a relational database refers to the process of making it capable of hand
 - **Scenario**: A company has a single database server with 16GB of RAM and a quad-core processor. As more users access the application, the database performance starts to degrade.
 - **Vertical Scaling**: The company upgrades the server to 64GB of RAM and an 8-core processor to handle more queries and larger datasets.
 
-### **Horizontal Scaling (Scaling Out)**
+### Horizontal Scaling (Scaling Out)
 
 **Horizontal Scaling** involves adding more **database servers** to distribute the load and handle more traffic. In this approach, the database workload is divided across multiple machines, which can be in a distributed architecture.
 
@@ -536,7 +535,7 @@ Scaling a relational database refers to the process of making it capable of hand
 - Instead of upgrading a single server, you add **more database nodes** (servers) to spread the load.
 - Each node can be responsible for a portion of the data or the queries.
 
-# **Types of Horizontal Scaling in Databases**
+# Types of Horizontal Scaling in Databases
 
 Horizontal scaling involves distributing your database workload across multiple servers (also called nodes). The main methods of horizontal scaling include **Sharding**, **Replication**, and **Partitioning**. Each technique helps manage large-scale databases with high throughput and ensures that the system can handle increased traffic while maintaining high availability.
 
@@ -644,13 +643,13 @@ There are two types of partitioning:
 - **Complexity**: Managing partitions can become complex, especially when choosing partition keys and ensuring balanced data distribution.
 - **Cross-Partition Queries**: Queries that need data from multiple partitions can be slower, especially in horizontal partitioning, as they require accessing multiple nodes or partitions.
 
-### **When to Use Each Scaling Technique**
+### When to Use Each Scaling Technique
 
 1. **Replication**: Use **replication** when you need to scale reads and improve **fault tolerance**. Replication is ideal for **read-heavy** applications like websites with a large number of users where read queries (such as displaying content) are common, and you want to avoid overloading the primary database with read traffic.
 2. **Sharding**: Use **sharding** when the database grows beyond the capacity of a single machine and when you need to distribute data based on a **shard key**. It’s particularly useful when you have **write-heavy** workloads and need to balance load across multiple servers.
 3. **Partitioning**: Use **partitioning** when you have a **single large table** or set of tables that need to be divided into smaller, more manageable pieces. Partitioning helps optimize performance and storage, especially when dealing with **large datasets** or **wide tables**.
 
-### **Real-Life Examples of Horizontal Scaling**
+### Real-Life Examples of Horizontal Scaling
 
 1. **Replication**: **Netflix** uses **replication** to distribute copies of their databases globally, ensuring fast reads from multiple data centers. They use **master-slave replication** for content and user data.
 2. **Sharding**: **Twitter** uses **sharding** to store tweets in multiple shards, based on tweet ID or user ID, to distribute the massive amount of data and handle high write throughput.
@@ -761,7 +760,7 @@ In a **distributed banking system**, a money transfer transaction may be replica
 
 Relational databases **don’t scale well horizontally** because of their **strong consistency requirements**, **complex joins**, and **ACID compliance**. While modern solutions like sharding and distributed SQL databases help with horizontal scaling, traditional relational databases face several challenges when distributed across multiple nodes.
 
-### **Challenges in Horizontally Scaling Relational Databases**
+### Challenges in Horizontally Scaling Relational Databases
 
 **1. ACID Transactions Across Nodes**
 
@@ -798,7 +797,7 @@ Relational databases **don’t scale well horizontally** because of their **stro
 - Managing multiple relational database instances (e.g., replication, failover, and data migrations) is **more complex** than managing a single monolithic instance.
 - Adding new shards often requires **data rebalancing**, which is costly and time-consuming.
 
-### **How Some Relational Databases Overcome This**
+### How Some Relational Databases Overcome This
 
 1. **Read Replicas**: Handle read-heavy workloads by distributing reads across multiple replicas.
 2. **Sharding (Carefully Designed)**: Databases like MySQL, PostgreSQL (Citus), and Amazon Aurora use **sharding frameworks** to distribute data efficiently.
@@ -838,7 +837,7 @@ At the start, you can get away with a **single database instance**. The main foc
 - **Scaling Needs**: Minimal—just a well-designed schema and careful index management to keep queries fast.
 - **ACID Properties**: Easy to maintain since it's a monolithic system with limited concurrent access.
 
-### **Stage 2: Growth to Thousands of Users**
+### Stage 2: Growth to Thousands of Users
 
 As the number of users grows into the thousands, some **performance issues** will start to emerge, particularly around database **write-heavy operations** (e.g., user sign-ups, profile updates). In this stage, you may need to begin scaling the database.
 
@@ -848,7 +847,7 @@ As the number of users grows into the thousands, some **performance issues** wil
     - **Query Optimization**: Ensure that queries are efficient (e.g., avoid SELECT *).
 - **ACID Properties**: At this stage, database consistency and isolation can be maintained easily since the database is still relatively small, and all operations can be done in a single instance.
 
-### **Stage 3: Growth to Tens of Thousands of Users**
+### Stage 3: Growth to Tens of Thousands of Users
 
 Once the number of users reaches tens of thousands, **vertical scaling** starts to hit its limits. Now, it’s time to think about **horizontal scaling** to accommodate growth.
 
@@ -857,7 +856,7 @@ Once the number of users reaches tens of thousands, **vertical scaling** starts 
 - **Load Balancing**: Set up **load balancers** to distribute requests to different database replicas or shards.
 - **ACID Properties**: In this phase, maintaining **atomicity** and **consistency** across multiple shards can become more complex. To ensure atomicity across multiple shards, you may use **Two-Phase Commit (2PC)** or **Eventual Consistency** based on the application’s needs. However, strict consistency might slow down performance.
 
-### **Stage 4: Growth to Hundreds of Thousands of Users**
+### Stage 4: Growth to Hundreds of Thousands of Users
 
 As the user base grows, managing large amounts of data, especially across many shards and replicas, will require even more advanced techniques.
 
@@ -870,7 +869,7 @@ As the user base grows, managing large amounts of data, especially across many s
     - **Isolation**: Isolation might be relaxed in favor of higher throughput if performance is a priority (i.e., using **eventual consistency**).
     - **Durability**: Ensure **write-ahead logs** are in place to recover from crashes.
 
-### **Stage 5: Scaling to Millions of Users**
+### Stage 5: Scaling to Millions of Users
 
 At this stage, your system must be **highly distributed**, and you will be dealing with massive data volumes.
 
@@ -880,7 +879,7 @@ At this stage, your system must be **highly distributed**, and you will be deali
 - **Eventual Consistency and CAP Trade-Off**: At this stage, you'll likely need to make trade-offs between **consistency** and **availability**. You might use **eventual consistency** for some operations to prioritize **availability** and **partition tolerance** (based on the **CAP theorem**).
 - **ACID Properties**: For some operations, you may switch from **strong consistency** to **eventual consistency** to reduce latency and improve scalability. **Isolation** and **Durability** are still important, but you may use **distributed locking** or **Quorum-based Commit** to manage these properties effectively across multiple nodes.
 
-### **Stage 6: Scaling to Billions of Users**
+### Stage 6: Scaling to Billions of Users
 
 At this level, your system is incredibly complex and needs to handle **massive amounts of data** across a large, globally distributed infrastructure.
 
@@ -893,7 +892,7 @@ At this level, your system is incredibly complex and needs to handle **massive a
     - **Isolation**: Isolation will be more relaxed, with **optimistic concurrency control** and techniques that support **high throughput** and **low latency**.
     - **Durability**: Use **multi-zone replication**, **distributed storage systems**, and **backup strategies** to ensure that committed transactions are durable.
 
-### **Summary of Database Scaling Strategy for 1 Billion Users**
+### Summary of Database Scaling Strategy for 1 Billion Users
 
 1. **Stage 1 (100 Users)**: Start with a single database instance and ensure performance with good indexing and query optimization.
 2. **Stage 2 (Thousands of Users)**: Begin vertical scaling and implement basic replication.
@@ -902,7 +901,7 @@ At this level, your system is incredibly complex and needs to handle **massive a
 5. **Stage 5 (Millions)**: Scale horizontally with advanced sharding, microservices, and data warehousing.
 6. **Stage 6 (Billions)**: Achieve scalability with multi-region databases, distributed caches, and relaxed ACID properties in some parts of the system.
 
-### **Tuning ACID Properties at Scale**
+### Tuning ACID Properties at Scale
 
 As you scale, **tuning ACID properties** becomes a balancing act between consistency, performance, and availability. Here's how you might adjust them at each stage:
 
@@ -958,7 +957,7 @@ As you scale, **tuning ACID properties** becomes a balancing act between consist
 2. **Schema Changes**: How would you roll out schema changes (e.g., adding a new column) in a large-scale relational database with minimal downtime?
 3. **Disaster Recovery**: How would you design a backup and disaster recovery strategy for a database handling millions of transactions per second?
 
-### **Open-Ended Design Questions**
+### Open-Ended Design Questions
 
 1. **E-Commerce System**:Imagine you're designing a relational database for an e-commerce site with 1 billion users. How would you:
     - Handle flash sales where millions of users order simultaneously?
@@ -967,7 +966,7 @@ As you scale, **tuning ACID properties** becomes a balancing act between consist
 3. **IoT System**: How would you design a relational database to handle data from billions of IoT devices sending updates in real time?
 4. **ACID vs. BASE**: In which scenarios would you consider moving away from strict ACID compliance to adopt a BASE (Basically Available, Soft state, Eventual consistency) model? How would you handle the transition?
 
-### **Hypothetical Situations**
+### Hypothetical Situations
 
 1. **Unexpected Load**: Suppose your e-commerce system experiences 10x unexpected traffic on Black Friday. How would your relational database handle the load? What bottlenecks might occur?
 2. **Data Migration**: If you were tasked with migrating a monolithic relational database to a distributed setup, how would you approach it while ensuring minimal downtime?
