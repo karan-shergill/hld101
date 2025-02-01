@@ -1,4 +1,4 @@
-# Table of contents
+# Relational Databases
 
 - [Transaction](#transaction)
     - [How a Transaction Works](#how-a-transaction-works)
