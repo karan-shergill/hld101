@@ -1,48 +1,50 @@
-# Table of contents
+# Cache
 
-- [Cache](#cache)
+- [Caching](#caching)
 - [Cache State](#cache-state)
-  - [Cold](#cold)
-  - [Warm](#warm)
-  - [Hot](#hot)
+    - [Cold](#cold)
+    - [Warm](#warm)
+    - [Hot](#hot)
 - [Caching Strategies](#caching-strategies)
-  - [Cache Aside (Lazy Loading)](#cache-aside-lazy-loading)
-  - [Write Through(Eager population)](#write-througheager-population)
-  - [Write Back (Write Behind)](#write-back-write-behind)
-  - [Read Through](#read-through)
+    - [Cache Aside (Lazy Loading)](#cache-aside-lazy-loading)
+    - [Write Through(Eager population)](#write-througheager-population)
+    - [Write Back (Write Behind)](#write-back-write-behind)
+    - [Read Through](#read-through)
+    - [Choosing the Right Strategy](#choosing-the-right-strategy)
 - [Cache Eviction Policies](#cache-eviction-policies)
 - [Where to Use Caching in System Design](#where-to-use-caching-in-system-design)
-- [Caching Tools and Technologies](#caching-tools-and-technologies)
+- [Caching **Tools and Technologies**](#caching-tools-and-technologies)
 - [Caching Challenges and How to Deal with Them](#caching-challenges-and-how-to-deal-with-them)
-  - [Cache Invalidation](#cache-invalidation)
-  - [Cache Consistency](#cache-consistency)
-  - [Cold Start](#cold-start)
-- [Cache Stampede](#cache-stampede)
-  - [Cache Penetration](#cache-penetration)
-  - [Cache Avalanche](#cache-avalanche)
+    - [Cache Invalidation](#cache-invalidation)
+    - [Cache Consistency](#cache-consistency)
+    - [Cold Start](#cold-start)
+    - [Cache Stampede](#cache-stampede)
+    - [Cache Penetration](#cache-penetration)
+    - [Cache Avalanche](#cache-avalanche)
 - [Horizontal and Vertical Scaling](#horizontal-and-vertical-scaling)
-  - [Vertical Scaling (Scaling Up)](#vertical-scaling-scaling-up)
-  - [Horizontal Scaling (Scaling Out)](#horizontal-scaling-scaling-out)
+    - [Vertical Scaling (Scaling Up)](#vertical-scaling-scaling-up)
+    - [Horizontal Scaling (Scaling Out)](#horizontal-scaling-scaling-out)
 - [Scaling cache from 100 to 1 billion users](#scaling-cache-from-100-to-1-billion-users)
-  - [Phase 1: Small Scale (100–10,000 Users)](#phase-1-small-scale-10010000-users)
-  - [Phase 2: Medium Scale (10,000–1 Million Users)](#phase-2-medium-scale-100001-million-users)
-  - [Phase 3: Large Scale (1 Million–100 Million Users)](#phase-3-large-scale-1-million100-million-users)
-  - [Phase 4: Hyper Scale (100 Million–1 Billion Users)](#phase-4-hyper-scale-100-million1-billion-users)
-  - [Final Architecture for 1 Billion Users](#final-architecture-for-1-billion-users)
+    - [Phase 1: Small Scale (100–10,000 Users)](#phase-1-small-scale-10010000-users)
+    - [Phase 2: Medium Scale (10,000–1 Million Users)](#phase-2-medium-scale-100001-million-users)
+    - [Phase 3: Large Scale (1 Million–100 Million Users)](#phase-3-large-scale-1-million100-million-users)
+    - [Phase 4: Hyper Scale (100 Million–1 Billion Users)](#phase-4-hyper-scale-100-million1-billion-users)
+    - [Final Architecture for 1 Billion Users](#final-architecture-for-1-billion-users)
 - [Drawback to caching at every level of a system/architecture?](#drawback-to-caching-at-every-level-of-a-systemarchitecture)
+- [Ensuring Database & Cache Consistency](#ensuring-database--cache-consistency)
 - [Qs for an Interview](#qs-for-an-interview)
-  - [Basic Understanding of Caching](#basic-understanding-of-caching)
-  - [Caching Strategies and Policies](#caching-strategies-and-policies)
-  - [Designing Caching Layers](#designing-caching-layers)
-  - [Cache Consistency and Invalidation](#cache-consistency-and-invalidation)
-  - [Handling Caching Challenges](#handling-caching-challenges)
-  - [Scalability and Performance](#scalability-and-performance)
-  - [Advanced Topics](#advanced-topics)
-  - [Debugging and Real-World Scenarios](#debugging-and-real-world-scenarios)
-  - [Scenario-Based Questions](#scenario-based-questions)
-  - [Open-Ended Brainstorming](#open-ended-brainstorming)
+    - [Basic Understanding of Caching](#basic-understanding-of-caching)
+    - [Caching Strategies and Policies](#caching-strategies-and-policies)
+    - [Designing Caching Layers](#designing-caching-layers)
+    - [Cache Consistency and Invalidation](#cache-consistency-and-invalidation)
+    - [Handling Caching Challenges](#handling-caching-challenges)
+    - [Scalability and Performance](#scalability-and-performance)
+    - [Advanced Topics](#advanced-topics)
+    - [Debugging and Real-World Scenarios](#debugging-and-real-world-scenarios)
+    - [Scenario-Based Questions](#scenario-based-questions)
+    - [Open-Ended Brainstorming](#open-ended-brainstorming)
 
-## Cache
+# Caching
 
 1. Caching is the process of storing copies of data in a high-speed storage layer (cache) so that future requests for the same data can be served faster. The cache acts as an intermediary between the application and a slower storage layer, such as a database or an external API.
 2. What cache help to avoid? Network I/O, Disk I/O and expensive computations
@@ -58,7 +60,7 @@
     3. Medical report application - containing sensitive user information might not require caching for performance reasons. Instead, the focus is on ensuring data security and access control mechanisms.
     4. Banking system - For someone’s account related private data, caching might not be require
 
-## Cache State
+# Cache State
 
 ### Cold
 
@@ -78,7 +80,7 @@
 1. A hot cache is fully populated with the most frequently accessed or relevant data, achieving optimal performance.
 2. Characteristics: High Hit Rate, Low Latency and Low Backend Load
 
-## Caching Strategies
+# Caching Strategies
 
 ### Cache Aside (Lazy Loading)
 
@@ -89,7 +91,7 @@
 - Cons: Initial access to uncached data is slow.
 - Use Case: User profile data access
 
-### **Write Through(Eager population)**
+### Write Through(Eager population)
 
 - Data is written to the cache and the database simultaneously.
 - Characteristics: Strong consistency; higher write latency.
@@ -112,7 +114,16 @@
 - Characteristics: Simplified cache logic; predictable read patterns.
 - Use Case: Metadata in streaming platforms like Netflix
 
-## Cache Eviction Policies
+### Choosing the Right Strategy
+
+| Strategy | Consistency | Read Performance | Write Performance | Failure Handling | Use Case |
+| --- | --- | --- | --- | --- | --- |
+| **Write-Through** | ✅ Strong | ✅ Fast | ❌ Slower | ❌ Can cause inconsistencies if DB write fails | Read-heavy workloads, when **strong consistency** is needed |
+| **Write-Around** | ❌ Weak | ❌ Slow (first read) | ✅ Fast | ✅ DB write failures don't impact cache | Data that is **rarely read** but frequently written |
+| **Write-Behind** | ❌ Weak | ✅ Fast | ✅ Fastest | ❌ Risk of data loss if cache crashes | Write-heavy systems that **can tolerate eventual consistency** |
+| **Cache-Aside** | ❌ Weak | ❌ First read is slow | ✅ Fast | ✅ DB failure does not affect cache | General-purpose, when **eventual consistency is acceptable** |
+
+# Cache Eviction Policies
 
 1. What happen it i don’t set Cache Eviction Policies? Without eviction policies, the cache can grow indefinitely, eventually consuming all available memory. This may cause the system to crash or start rejecting new write requests due to memory limits
 2. What will happen if stored key in cache has no expiration(TTL)? Applications might serve incorrect or stale data to users, leading to inconsistencies with the underlying source of truth (e.g., database)
@@ -122,23 +133,23 @@
     - First In, First Out (FIFO): Evicts the oldest data.
     - Time-to-Live (TTL): Data expires after a set duration.
 
-## Where to Use Caching in System Design
+# Where to Use Caching in System Design
 
 1. Database Query Results: Cache frequently queried or computationally expensive results.
 2. API Responses: Cache external API responses to avoid rate limits and reduce latency.
 3. Session Management: Cache user sessions for quick access.
 4. Content Delivery: Cache static content like images, videos, or web assets.
 
-## Caching **Tools and Technologies**
+# Caching **Tools and Technologies**
 
 1. In-Memory Caches: Redis, Memcached.
 2. CDNs: Cloudflare, Akamai, AWS CloudFront.
 3. Database Caching: Query caching, materialized views.
 4. Application-Level Libraries: Guava Cache (Java), CacheManager (Spring), etc.
 
-## Caching Challenges and How to Deal with Them
+# Caching Challenges and How to Deal with Them
 
-### **Cache Invalidation**
+### Cache Invalidation
 
 Ensuring that outdated data is removed or replaced with fresh data in the cache.
 
@@ -148,7 +159,7 @@ Solutions:
 - Write Through/Write Back Strategies: Update the cache when data is modified in the database.
 - Event-Driven Invalidation: Use database triggers or messaging systems to invalidate specific cache keys.
 
-### **Cache Consistency**
+### Cache Consistency
 
 Maintaining synchronization between the cache and the underlying data source.
 
@@ -163,7 +174,7 @@ Solutions:
 - Read Through Strategy: Fetch fresh data from the database when needed.
 - Invalidate on Writes: Clear cache entries when the database is updated.
 
-### **Cold Start**
+### Cold Start
 
 When a cache is empty (e.g., after initialization or a restart), leading to high latency and load on the backend.
 
@@ -172,7 +183,7 @@ Solutions:
 - Cache Pre-Warming: Preload frequently accessed data into the cache during startup.
 - Lazy Loading: Populate the cache only when data is requested.
 
-## **Cache Stampede**
+### Cache Stampede
 
 Occurs when multiple requests simultaneously query the backend because of a cache miss or expired data.
 
@@ -181,7 +192,7 @@ Solutions:
 - Request Coalescing: Allow only one request to fetch the data and populate the cache while others wait.
 - Locking Mechanisms: Use distributed locks to prevent multiple backend requests.
 
-### **Cache Penetration**
+### Cache Penetration
 
 Frequent requests for non-existent keys lead to unnecessary load on the backend.
 
@@ -190,7 +201,7 @@ Solutions:
 - Negative Caching: Cache responses for non-existent keys with a short TTL.
 - Input Validation: Validate and filter invalid or nonsensical requests at the application level.
 
-### **Cache Avalanche**
+### Cache Avalanche
 
 A large number of cache keys expire simultaneously, causing a sudden surge in backend load.
 
@@ -200,7 +211,7 @@ Solutions:
 - Pre-Warming: Gradually refill the cache with critical data before expiration.
 - Backup Caching: Maintain a secondary lower-priority cache to serve requests if the primary cache is unavailable.
 
-## Horizontal and Vertical Scaling
+# Horizontal and Vertical Scaling
 
 ### Vertical Scaling (Scaling Up)
 
@@ -247,9 +258,9 @@ Adding more cache servers to distribute the load across multiple nodes.
 - Potential for **data consistency issues** across nodes.
 - **Network latency** may increase when accessing remote nodes.
 
-## Scaling cache from 100 to 1 billion users
+# Scaling cache from 100 to 1 billion users
 
-### **Phase 1: Small Scale (100–10,000 Users)**
+### Phase 1: Small Scale (100–10,000 Users)
 
 **Characteristics:** Low traffic, limited budget, simple architecture.
 
@@ -265,7 +276,7 @@ Adding more cache servers to distribute the load across multiple nodes.
     - Static assets like configuration files or commonly used lookups (e.g., country codes).
     - User session data for faster authentication.
 
-### **Phase 2: Medium Scale (10,000–1 Million Users)**
+### Phase 2: Medium Scale (10,000–1 Million Users)
 
 **Characteristics:** Increased traffic, higher database queries, more dynamic data.
 
@@ -284,7 +295,7 @@ Adding more cache servers to distribute the load across multiple nodes.
     - Horizontal scaling of caching servers.
     - Monitor cache performance (hit/miss rates, memory usage).
 
-### **Phase 3: Large Scale (1 Million–100 Million Users)**
+### Phase 3: Large Scale (1 Million–100 Million Users)
 
 **Characteristics:** Diverse user base, higher concurrency, more complex data flows.
 
@@ -304,7 +315,7 @@ Adding more cache servers to distribute the load across multiple nodes.
     - Use eviction policies like **Least Recently Used (LRU)** to manage memory efficiently.
     - Implement strategies for **cache invalidation** and **cache warming.**
 
-### **Phase 4: Hyper Scale (100 Million–1 Billion Users)**
+### Phase 4: Hyper Scale (100 Million–1 Billion Users)
 
 **Characteristics:** Massive scale, diverse workloads, high availability requirements.
 
@@ -325,7 +336,7 @@ Adding more cache servers to distribute the load across multiple nodes.
     - Use observability tools to monitor hit rates, latency, and resource usage.
     - Employ fault-tolerant systems (e.g., multi-master Redis clusters).
 
-### **Final Architecture for 1 Billion Users**
+### Final Architecture for 1 Billion Users
 
 | **Layer** | **Type of Cache** | **Example Use Cases** |
 | --- | --- | --- |
@@ -334,7 +345,7 @@ Adding more cache servers to distribute the load across multiple nodes.
 | **Application Layer** | In-Memory Distributed Cache (e.g., Redis) | API responses, session data, computed results. |
 | **Database Layer** | Query Cache | Expensive queries, aggregations. |
 
-## Drawback to caching at every level of a system/architecture?
+# Drawback to caching at every level of a system/architecture?
 
 Caching at every level of a system or architecture may sound like an effective strategy for performance optimization, but it introduces several drawbacks and challenges.
 
@@ -347,7 +358,30 @@ Caching at every level of a system or architecture may sound like an effective s
 7. Difficulty in Cache Optimization: Fine-tuning TTLs, eviction policies, and caching strategies for each layer is non-trivial.
 8. Increased Debugging Difficulty: Debugging application behavior becomes harder when caches at different layers behave unexpectedly. More effort is required to identify the root cause of issues.
 
-## Qs for an Interview
+# Ensuring Database & Cache Consistency
+
+To **keep cache and database in sync**, consider these techniques:
+
+**1. TTL (Time-To-Live) Expiry**
+
+- Cache entries **automatically expire** after a certain period, ensuring fresh reads.
+- Good for **eventual consistency** but may serve stale data in the meantime.
+
+**2. Cache Invalidation**
+
+- After a **DB update**, proactively **delete the cache entry** so it gets repopulated on the next read.
+- Requires **application logic to manage invalidation**.
+
+**3. Event-Driven Updates**
+
+- Use **message queues** (e.g., Kafka, SQS, Redis Streams) to **propagate updates** from the DB to the cache.
+- Works well for **real-time sync** but adds complexity.
+
+**4. Distributed Cache Coordination**
+
+- Use **distributed transactions** or **transactional outbox pattern** to ensure cache updates happen atomically with DB updates.
+
+# Qs for an Interview
 
 ### Basic Understanding of Caching
 
