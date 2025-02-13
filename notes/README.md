@@ -5,3 +5,6 @@
 4. Choosing right database
 5. How Search bar works with filters?
 6. Where all I can use Redis in my system?
+7. Good API design practice for interviews
+8. Database keys
+9. Database table design
