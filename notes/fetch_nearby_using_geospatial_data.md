@@ -36,6 +36,13 @@
     - [Cons:](#cons)
     - [Use Cases:](#use-cases)
 - [Comparison](#comparison)
+- [Databases that can be used for Geospatial Data](#databases-that-can-be-used-for-geospatial-data)
+    - [1. PostgreSQL + PostGIS](#1-postgresql--postgis)
+    - [2. MySQL (InnoDB + Spatial Indexes)](#2-mysql-innodb--spatial-indexes)
+    - [3. MongoDB (Geospatial Indexes)](#3-mongodb-geospatial-indexes)
+    - [4. Redis (Geospatial Indexing)](#4-redis-geospatial-indexing)
+    - [5. Google BigQuery (GIS Functions)](#5-google-bigquery-gis-functions)
+    - [Which One Should You Use?](#which-one-should-you-use)
 - [Reference](#reference)
 
 # Some Basics
@@ -241,7 +248,7 @@ Root (Whole City)
 
 Each level of subdivision increases **precision**.
 
-### **Pros:**
+### Pros:
 
 ✅ **Efficient spatial partitioning** (logarithmic lookup).
 
@@ -251,7 +258,7 @@ Each level of subdivision increases **precision**.
 
 ✅ **Works well with dynamic data** (adding/removing locations).
 
-### **Cons:**
+### Cons:
 
 ❌ **Can become unbalanced** if data is clustered (one quadrant gets too many points).
 
@@ -259,7 +266,7 @@ Each level of subdivision increases **precision**.
 
 ❌ **More complex than a simple grid or geohash.**
 
-### **Use Cases:**
+### Use Cases:
 
 - **Uber H3**: Uber uses a hexagonal version of quadtrees for **efficient driver matching**.
 - **Google Maps & GIS Systems**: Fast spatial indexing for rendering maps.
@@ -326,6 +333,300 @@ Google S2 is an **advanced spatial indexing system** that maps Earth's surface o
 | **Performance** | Good | Better | Best |
 | **Ease of Use** | ✅ Simple | ⚠️ Medium | ❌ Complex |
 | **Best For** | Databases, Approx. Search | Large-Scale Spatial Indexing | Google-Scale Applications |
+
+# Databases that can be used for Geospatial Data
+
+Several databases support geospatial data, each offering different indexing and query capabilities. Here's a breakdown of the most commonly used databases for storing and querying geospatial data.
+
+### 1. PostgreSQL + PostGIS
+
+**Why Use It?**
+
+PostgreSQL with the **PostGIS** extension is one of the most powerful open-source databases for handling geospatial data. PostGIS adds support for spatial data types and spatial indexes.
+
+**How to Store Geospatial Data in PostgreSQL?**
+
+1. **Install PostGIS Extension:**
+    
+    ```sql
+    CREATE EXTENSION postgis;
+    ```
+    
+2. **Create a Table with Geospatial Columns:**
+    
+    ```sql
+    CREATE TABLE locations (
+        id SERIAL PRIMARY KEY,
+        name TEXT,
+        geom GEOMETRY(Point, 4326) -- WGS 84 coordinate system
+    );
+    ```
+    
+3. **Insert Geospatial Data:**
+    
+    ```sql
+    INSERT INTO locations (name, geom)
+    VALUES ('Golden Gate Bridge', ST_GeomFromText('POINT(-122.4783 37.8199)', 4326));
+    ```
+    
+4. **Create a Spatial Index (for faster queries):**
+    
+    ```sql
+    CREATE INDEX idx_locations_geom ON locations USING GIST(geom);
+    ```
+    
+5. **Find Locations Near a Point (e.g., within 10 km):**
+    
+    ```sql
+    SELECT name
+    FROM locations
+    WHERE ST_DWithin(
+        geom,
+        ST_GeomFromText('POINT(-122.4194 37.7749)', 4326),
+        10000
+    );
+    ```
+    
+
+**Pros:**
+
+✅ Advanced spatial queries (e.g., distance, intersections, and nearest neighbors).
+
+✅ **GiST & BRIN indexes** for efficient geospatial lookups.
+
+✅ Open-source and widely supported.
+
+Cons:
+
+❌ Requires **PostGIS extension** for full functionality.
+
+❌ More complex than NoSQL solutions for simple use cases.
+
+Use Cases:
+
+- Storing **addresses, cities, and landmarks** with geospatial queries.
+- **Ride-hailing (Uber, Lyft)**: Matching riders with nearby drivers.
+- **Real estate apps**: Finding properties within a region.
+
+### 2. MySQL (InnoDB + Spatial Indexes)
+
+**Why Use It?**
+
+MySQL supports geospatial data using **SPATIAL indexes** but with **limited functions** compared to PostgreSQL.
+
+**How to Store Geospatial Data in MySQL?**
+
+1. **Create a Table with a Spatial Column:**
+    
+    ```sql
+    CREATE TABLE places (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255),
+        location POINT NOT NULL,
+        SPATIAL INDEX (location)
+    );
+    ```
+    
+2. **Insert Data:**
+    
+    ```sql
+    INSERT INTO places (name, location)
+    VALUES ('Eiffel Tower', ST_GeomFromText('POINT(2.2945 48.8584)'));
+    ```
+    
+3. **Find Nearby Locations (Bounding Box Search - Approximate):**
+    
+    ```sql
+    SELECT name
+    FROM places
+    WHERE MBRContains(
+        ST_GeomFromText('POLYGON((2.28 48.85, 2.31 48.85, 2.31 48.87, 2.28 48.87, 2.28 48.85))'),
+        location
+    );
+    ```
+    
+
+**Pros:**
+
+✅ Supports **SPATIAL INDEXES** for fast geospatial queries.
+
+✅ **Simple to set up** for basic geospatial applications.
+
+**Cons:**
+
+❌ Limited spatial functions (no ST_DWithin, no full-featured GIS functions).
+
+❌ **Bounding box** search (not true radius-based searches).
+
+**Use Cases:**
+
+- **Small-scale location-based apps** with basic distance filtering.
+- **Geospatial-enabled business directories.**
+
+### 3. MongoDB (Geospatial Indexes)
+
+**Why Use It?**
+
+MongoDB supports **geospatial indexing** for fast proximity searches in NoSQL environments.
+
+**How to Store Geospatial Data in MongoDB?**
+
+1. **Create a Collection and Insert Data:**
+    
+    ```
+    db.places.insertOne({
+        name: "Statue of Liberty",
+        location: { type: "Point", coordinates: [-74.0445, 40.6892] }
+    });
+    ```
+    
+2. **Create a 2dsphere Index for Geospatial Queries:**
+    
+    ```
+    db.places.createIndex({ location: "2dsphere" });
+    ```
+    
+3. **Find Nearby Locations (Within 5 km Radius):**
+    
+    ```
+    db.places.find({
+        location: {
+            $near: {
+                $geometry: { type: "Point", coordinates: [-74.0445, 40.6892] },
+                $maxDistance: 5000
+            }
+        }
+    });
+    ```
+    
+
+**Pros:**
+
+✅ **Fast geospatial queries** with `2dsphere` indexes.
+
+✅ Supports **GeoJSON format** for flexible location storage.
+
+✅ NoSQL database - works well with dynamic schema.
+
+**Cons:**
+
+❌ Not as powerful as PostGIS for advanced GIS calculations.
+
+❌ **Limited to spherical (Earth-like) distance calculations.**
+
+**Use Cases:**
+
+- **Ride-sharing apps (Uber, Lyft)** for driver-passenger proximity searches.
+- **Food delivery services** for finding nearby restaurants.
+- **Real-time tracking applications** (IoT, logistics, fleet tracking).
+
+### 4. Redis (Geospatial Indexing)
+
+**Why Use It?**
+
+Redis provides **fast in-memory geospatial indexing**, making it ideal for **real-time location lookups**.
+
+**How to Store Geospatial Data in Redis?**
+
+1. **Add Locations to a Geospatial Set:**
+    
+    ```
+    GEOADD places -74.0445 40.6892 "Statue of Liberty"
+    GEOADD places -73.9857 40.7484 "Empire State Building"
+    ```
+    
+2. **Find Nearby Locations (Within 10 km):**
+    
+    ```
+    GEORADIUS places -74.0445 40.6892 10 km WITHDIST
+    ```
+    
+3. **Get Distance Between Two Points:**
+    
+    ```
+    GEODIST places "Statue of Liberty" "Empire State Building" km
+    ```
+    
+
+**Pros:**
+
+✅ **Blazing-fast lookups** (O(log N) performance).
+
+✅ **Simple API** for basic geospatial searches.
+
+✅ **Great for caching location data** (e.g., frequent nearby searches).
+
+**Cons:**
+
+❌ No advanced geospatial functions (e.g., polygons, intersections).
+
+❌ **Not persistent** (best for short-term storage).
+
+**Use Cases:**
+
+- **Real-time ride-hailing systems (Uber, Lyft, Ola).**
+- **Fast lookups of nearby locations** in a high-traffic app.
+- **Cache layer for more powerful geospatial databases.**
+
+### 5. Google BigQuery (GIS Functions)
+
+**Why Use It?**
+
+BigQuery supports **geospatial analytics at scale**, making it useful for **large-scale location-based analysis**.
+
+**How to Store Geospatial Data in BigQuery?**
+
+1. **Create a Table with a Geography Column:**
+    
+    ```sql
+    CREATE TABLE my_dataset.places (
+        id STRING,
+        name STRING,
+        location GEOGRAPHY
+    );
+    ```
+    
+2. **Insert Data:**
+    
+    ```sql
+    INSERT INTO my_dataset.places (id, name, location)
+    VALUES ('1', 'Central Park', ST_GEOGPOINT(-73.968285, 40.785091));
+    ```
+    
+3. **Find Places Within a Radius:**
+    
+    ```sql
+    SELECT name
+    FROM my_dataset.places
+    WHERE ST_DWithin(
+        location,
+        ST_GEOGPOINT(-73.9857, 40.7484),
+        5000
+    );
+    ```
+    
+
+**Pros:**
+
+✅ Handles **massive geospatial datasets**.
+
+✅ **SQL-based GIS functions** similar to PostGIS.
+
+**Cons:**
+
+❌ **Expensive for small-scale applications.**
+
+❌ **Best for batch processing, not real-time queries.**
+
+### Which One Should You Use?
+
+| Database | Best For |
+| --- | --- |
+| **PostGIS (PostgreSQL)** | Complex geospatial queries, mapping |
+| **MySQL** | Basic geospatial storage |
+| **MongoDB** | NoSQL + geospatial queries |
+| **Redis** | Fast, real-time location lookups |
+| **BigQuery** | Large-scale geospatial analytics |
 
 # Reference
 
