@@ -77,6 +77,8 @@
     - [Real-Life Examples of Redis as a Primary Database](#real-life-examples-of-redis-as-a-primary-database)
 - [Summary](#summary)
 
+See: https://drive.google.com/file/d/1unkCM1ELsCoB3MrqHk_wWP8zCowY4LGG/view
+
 [**Redis Use Cases Examples in the Real-World**](https://www.coderbased.com/p/redis-use-cases-examples-in-the-real?open=false#%C2%A7geolocation-distance-driver-distance-and-attendance-system)
 
 [**Top 5 Redis Use Cases**](https://youtu.be/a4yX7RUgTxI)
