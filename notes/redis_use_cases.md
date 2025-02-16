@@ -75,6 +75,9 @@
     - [Pros of Using Redis as a Primary Database](#pros-of-using-redis-as-a-primary-database)
     - [Cons of Using Redis as a Primary Database](#cons-of-using-redis-as-a-primary-database)
     - [Real-Life Examples of Redis as a Primary Database](#real-life-examples-of-redis-as-a-primary-database)
+- [Bloom Filter in Redis](#bloom-filter-in-redis)
+    - [Pros Of having Bloom Filter in Redis](#pros-of-having-bloom-filter-in-redis)
+    - [Cons Of having Bloom Filter in Redis](#cons-of-having-bloom-filter-in-redis)
 - [Summary](#summary)
 - [Code Implementation Examples](#code-implementation-examples)
     - [Redis - Caching](#redis---caching)
@@ -86,6 +89,7 @@
     - [Redis - Geospatial Indexing](#redis---geospatial-indexing)
     - [Redis - Pub/Sub Messaging](#redis---pubsub-messaging)
     - [Redis - Job Queues (Background Tasks)](#redis---job-queues-background-tasks)
+    - [Redis - Bloom Filter](#redis---bloom-filter)
 
 [**Redis Use Cases Examples in the Real-World**](https://www.coderbased.com/p/redis-use-cases-examples-in-the-real?open=false#%C2%A7geolocation-distance-driver-distance-and-attendance-system)
 
@@ -1316,6 +1320,23 @@ SLAVEOF <master-ip> <master-port>
 
 **5. Social Media & Chat Applications - Twitter, Instagram, WhatsApp** – Uses Redis Pub/Sub for real-time notifications and messaging.
 
+# Bloom Filter in Redis
+
+**Redis supports Bloom Filters** natively using the **RedisBloom** module. Bloom filters are probabilistic data structures that efficiently test **set membership** with minimal memory. They are widely used for **fast existence checks** (e.g., detecting duplicate requests, caching lookups, spam filtering).
+
+### Pros Of having Bloom Filter in Redis
+
+1. **Fast Membership Check** → Constant time (`O(1)`) for insert & lookup.
+2. **Memory Efficient** → Uses **bitwise hashing** instead of storing full data.
+3. **Scalable** → Supports **millions of entries** with minimal RAM.
+4. **Distributed & Persistent** → Works across Redis clusters.
+
+### Cons Of having Bloom Filter in Redis
+
+1. **False Positives** → A Bloom filter **might** return `true` for non-existent items.
+2. **No Deletion** → Cannot remove elements once added.
+3. **Larger Size for Accuracy** → Lowering the false-positive rate **increases memory usage**.
+
 # Summary
 
 Here’s a **comprehensive summary table** of all Redis use cases discussed in this session:
@@ -1951,6 +1972,55 @@ public class RedisJobQueueApp {
         producer.enqueueJob("Task 1: Email Notification");
         producer.enqueueJob("Task 2: Generate Report");
         producer.enqueueJob("Task 3: Data Processing");
+    }
+}
+```
+
+### Redis - Bloom Filter
+
+```java
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.bloom.BFInsertParams;
+import redis.clients.jedis.bloom.RedisBloom;
+
+import java.util.Arrays;
+
+public class RedisBloomFilter {
+    private final RedisBloom redisBloom;
+    private final String filterName;
+
+    public RedisBloomFilter(String redisHost, int redisPort, String filterName) {
+        Jedis jedis = new Jedis(redisHost, redisPort);
+        this.redisBloom = new RedisBloom(jedis);
+        this.filterName = filterName;
+
+        // Create Bloom Filter with expected size & false positive rate
+        redisBloom.bfReserve(filterName, 0.01, 1000);
+    }
+
+    // Add an element to the Bloom Filter
+    public void addElement(String element) {
+        redisBloom.bfAdd(filterName, element);
+        System.out.println("Added: " + element);
+    }
+
+    // Check if an element **might** exist in the Bloom Filter
+    public boolean checkElement(String element) {
+        boolean exists = redisBloom.bfExists(filterName, element);
+        System.out.println("Exists (" + element + ")? " + exists);
+        return exists;
+    }
+
+    public static void main(String[] args) {
+        RedisBloomFilter bloomFilter = new RedisBloomFilter("localhost", 6379, "myBloomFilter");
+
+        // Add Elements
+        bloomFilter.addElement("user123");
+        bloomFilter.addElement("user456");
+
+        // Check Existence
+        bloomFilter.checkElement("user123");  // True (definitely present)
+        bloomFilter.checkElement("user789");  // False or might be True (false positive)
     }
 }
 ```
