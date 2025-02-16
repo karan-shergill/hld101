@@ -76,8 +76,16 @@
     - [Cons of Using Redis as a Primary Database](#cons-of-using-redis-as-a-primary-database)
     - [Real-Life Examples of Redis as a Primary Database](#real-life-examples-of-redis-as-a-primary-database)
 - [Summary](#summary)
-
-See: https://drive.google.com/file/d/1unkCM1ELsCoB3MrqHk_wWP8zCowY4LGG/view
+- [Code Implementation Examples](#code-implementation-examples)
+    - [Redis - Caching](#redis---caching)
+    - [Redis - Session Storage](#redis---session-storage)
+    - [Redis - Rate Limiting](#redis---rate-limiting)
+    - [Redis - Leaderboard](#redis---leaderboard)
+    - [Redis - Counting (Views, Likes, Upvotes)](#redis---counting-views-likes-upvotes)
+    - [Redis - Distributed Locks](#redis---distributed-locks)
+    - [Redis - Geospatial Indexing](#redis---geospatial-indexing)
+    - [Redis - Pub/Sub Messaging](#redis---pubsub-messaging)
+    - [Redis - Job Queues (Background Tasks)](#redis---job-queues-background-tasks)
 
 [**Redis Use Cases Examples in the Real-World**](https://www.coderbased.com/p/redis-use-cases-examples-in-the-real?open=false#%C2%A7geolocation-distance-driver-distance-and-attendance-system)
 
@@ -96,7 +104,7 @@ Redis is one of the most popular choices for caching due to its in-memory data s
     - The application first checks Redis for the data (cache lookup).
     - If found, Redis returns the data (cache hit).
     - If not found (cache miss), the application fetches the data from the database and stores it in Redis before returning it.
-2. **Common Caching Strategies**:
+2. [**Common Caching Strategies**](https://tinyurl.com/2a5xdx3t):
     - **Write-Through Cache**: Data is written to both Redis and the database at the same time.
     - **Write-Around Cache**: Data is written directly to the database, and Redis is only updated when a read request occurs.
     - **Write-Back (Write-Behind) Cache**: Data is written to Redis first, and asynchronously updated in the database.
@@ -119,31 +127,21 @@ Redis is one of the most popular choices for caching due to its in-memory data s
 
 ### Pros of Using Redis for Caching
 
-✅ **Ultra-Fast Performance** – Redis operates in memory and provides sub-millisecond latency.
-
-✅ **Reduced Database Load** – Offloads frequent reads from databases, improving database performance.
-
-✅ **Scalability** – Redis can handle millions of operations per second and supports clustering.
-
-✅ **Flexible Expiry Mechanisms** – Supports TTLs, automatic eviction, and LRU policies.
-
-✅ **Atomic Operations** – Supports transactions and atomic commands for efficient updates.
-
-✅ **Supports Advanced Data Structures** – More than just key-value caching (Lists, Hashes, Sets, etc.).
-
-✅ **High Availability** – Supports replication, failover, and persistence options.
+1. **Ultra-Fast Performance** – Redis operates in memory and provides sub-millisecond latency.
+2. **Reduced Database Load** – Offloads frequent reads from databases, improving database performance.
+3. **Scalability** – Redis can handle millions of operations per second and supports clustering.
+4. **Flexible Expiry Mechanisms** – Supports TTLs, automatic eviction, and LRU policies.
+5. **Atomic Operations** – Supports transactions and atomic commands for efficient updates.
+6. **Supports Advanced Data Structures** – More than just key-value caching (Lists, Hashes, Sets, etc.).
+7. **High Availability** – Supports replication, failover, and persistence options.
 
 ### Cons of Using Redis for Caching
 
-❌ **Memory Cost** – Redis is an in-memory store, making it expensive compared to disk-based databases.
-
-❌ **Data Loss Risk** – If persistence is not enabled, data loss occurs upon crashes or reboots.
-
-❌ **Manual Cache Invalidation** – Keeping the cache in sync with the database can be complex.
-
-❌ **Single-threaded for Commands** – Although fast, Redis is single-threaded for command execution, which may cause bottlenecks in extreme cases.
-
-❌ **Limited Querying Capabilities** – Redis lacks advanced query support compared to databases.
+1. **Memory Cost** – Redis is an in-memory store, making it expensive compared to disk-based databases.
+2. **Data Loss Risk** – If persistence is not enabled, data loss occurs upon crashes or reboots.
+3. **Manual Cache Invalidation** – Keeping the cache in sync with the database can be complex.
+4. **Single-threaded for Commands** – Although fast, Redis is single-threaded for command execution, which may cause bottlenecks in extreme cases.
+5. **Limited Querying Capabilities** – Redis lacks advanced query support compared to databases.
 
 ### Real-Life Examples of Redis Caching
 
@@ -180,7 +178,7 @@ Redis is widely used for managing user sessions in web applications due to its l
 **3. Redis Features for Session Management**
 
 - **TTL (Time-To-Live)** – Sessions can be set to expire after a predefined period (e.g., `EXPIRE session_id 3600` for 1 hour).
-- **LRU Eviction Policy** – Least Recently Used sessions are evicted first when memory is full.
+- **LRU Eviction Policy** – Least Recently Used sessions are evicted first when memory is full. (Example - Netflix let you keep 4 instances active at a time)
 - **Persistence Options** –
     - **RDB (Snapshot Persistence)** – Saves session data at intervals.
     - **AOF (Append-Only File)** – Logs each write operation for recovery.
@@ -198,27 +196,19 @@ Redis is widely used for managing user sessions in web applications due to its l
 
 ### Pros of Using Redis for Session Storage
 
-✅ **Ultra-Fast Read & Write Speed** – Ideal for real-time session handling.
-
-✅ **Automatic Expiry & Cleanup** – Sessions expire automatically, reducing stale data.
-
-✅ **Scalability** – Supports distributed storage and clustering for large-scale applications.
-
-✅ **Persistence Options** – Prevents data loss in case of crashes.
-
-✅ **Multi-Platform Support** – Works with Node.js, Python, Java, PHP, etc.
-
-✅ **Reduces Database Load** – Keeps session data separate from the primary database.
+1. **Ultra-Fast Read & Write Speed** – Ideal for real-time session handling.
+2. **Automatic Expiry & Cleanup** – Sessions expire automatically, reducing stale data.
+3. **Scalability** – Supports distributed storage and clustering for large-scale applications.
+4. **Persistence Options** – Prevents data loss in case of crashes.
+5. **Multi-Platform Support** – Works with Node.js, Python, Java, PHP, etc.
+6. **Reduces Database Load** – Keeps session data separate from the primary database.
 
 ### Cons of Using Redis for Session Storage
 
-❌ **Memory Intensive** – In-memory storage can be costly compared to disk-based alternatives.
-
-❌ **Potential Data Loss** – If persistence isn’t enabled, sessions may be lost on crashes.
-
-❌ **Session Synchronization Challenges** – Requires careful configuration in multi-region setups.
-
-❌ **Write Bottlenecks in a Single Instance** – Needs sharding or clustering for high throughput.
+1. **Memory Intensive** – In-memory storage can be costly compared to disk-based alternatives.
+2. **Potential Data Loss** – If persistence isn’t enabled, sessions may be lost on crashes.
+3. **Session Synchronization Challenges** – Requires careful configuration in multi-region setups.
+4. **Write Bottlenecks in a Single Instance** – Needs sharding or clustering for high throughput.
 
 ### Real-Life Examples of Redis for Session Storage
 
@@ -287,25 +277,18 @@ Redis is widely used for **rate limiting** to control the number of requests use
 
 ### Pros of Using Redis for Rate Limiting
 
-✅ **Fast Execution** – In-memory operations make enforcement real-time.
-
-✅ **Atomicity** – Commands like `INCR`, `ZADD`, and `EXPIRE` ensure safe concurrent updates.
-
-✅ **Auto-Expiry Support** – Avoids stale data accumulation.
-
-✅ **Distributed Capability** – Works well with Redis Cluster and Redis Sentinel.
-
-✅ **Flexible Strategies** – Supports multiple algorithms based on use cases.
+1. **Fast Execution** – In-memory operations make enforcement real-time.
+2. **Atomicity** – Commands like `INCR`, `ZADD`, and `EXPIRE` ensure safe concurrent updates.
+3. **Auto-Expiry Support** – Avoids stale data accumulation.
+4. **Distributed Capability** – Works well with Redis Cluster and Redis Sentinel.
+5. **Flexible Strategies** – Supports multiple algorithms based on use cases.
 
 ### Cons of Using Redis for Rate Limiting
 
-❌ **Memory Consumption** – Storing request logs (Sliding Window Log) can be expensive.
-
-❌ **Single Point of Failure** – If Redis crashes and persistence is off, rate limits reset.
-
-❌ **Complexity in Synchronization** – In multi-region setups, rate limits may need Redis replication strategies.
-
-❌ **Potential Thundering Herd Problem** – A sudden spike when limits reset requires mitigation strategies.
+1. **Memory Consumption** – Storing request logs (Sliding Window Log) can be expensive.
+2. **Single Point of Failure** – If Redis crashes and persistence is off, rate limits reset.
+3. **Complexity in Synchronization** – In multi-region setups, rate limits may need Redis replication strategies.
+4. **Potential Thundering Herd Problem** – A sudden spike when limits reset requires mitigation strategies.
 
 ### Real-Life Examples of Redis Rate Limiting
 
@@ -404,27 +387,19 @@ Redis **Sorted Sets (ZSETs)** store items with a score while keeping them **auto
 
 ### Pros of Using Redis for Leaderboards
 
-✅ **Real-time Updates** – Scores are automatically ranked without manual sorting.
-
-✅ **Fast Queries** – `O(log N)` time complexity makes rank lookups efficient.
-
-✅ **Scalability** – Handles millions of leaderboard entries easily.
-
-✅ **Expiration Support** – Can auto-remove old leaderboards (weekly/monthly resets).
-
-✅ **Flexibility** – Supports global, regional, and multi-metric leaderboards.
-
-✅ **Atomic Operations** – Ensures consistency in ranking updates.
+1. **Real-time Updates** – Scores are automatically ranked without manual sorting.
+2. **Fast Queries** – `O(log N)` time complexity makes rank lookups efficient.
+3. **Scalability** – Handles millions of leaderboard entries easily.
+4. **Expiration Support** – Can auto-remove old leaderboards (weekly/monthly resets).
+5. **Flexibility** – Supports global, regional, and multi-metric leaderboards.
+6. **Atomic Operations** – Ensures consistency in ranking updates.
 
 ### Cons of Using Redis for Leaderboards
 
-❌ **Memory Consumption** – Large leaderboards require significant memory.
-
-❌ **Lack of Complex Queries** – No support for advanced filtering like SQL (e.g., filtering by country *and* XP).
-
-❌ **Data Loss Risk** – If persistence (RDB/AOF) is not enabled, leaderboard data may be lost on crashes.
-
-❌ **Limited Aggregation** – Aggregating multiple leaderboards (e.g., merging XP and Kills rankings) is complex.
+1. **Memory Consumption** – Large leaderboards require significant memory.
+2. **Lack of Complex Queries** – No support for advanced filtering like SQL (e.g., filtering by country *and* XP).
+3. **Data Loss Risk** – If persistence (RDB/AOF) is not enabled, leaderboard data may be lost on crashes.
+4. **Limited Aggregation** – Aggregating multiple leaderboards (e.g., merging XP and Kills rankings) is complex.
 
 ### Real-Life Examples of Redis Leaderboards
 
@@ -563,25 +538,18 @@ Using **sorted sets (ZSETs)**, you can rank posts or users based on views, likes
 
 ### Pros of Using Redis for Counting
 
-✅ **Blazing-Fast Increments** – Handles millions of updates per second.
-
-✅ **Atomic Operations** – Prevents race conditions in concurrent writes.
-
-✅ **Memory Efficiency** – Uses small-sized keys and data structures (Hashes, HyperLogLog).
-
-✅ **Auto-Expiry Support** – Avoids unnecessary data buildup for time-sensitive counters.
-
-✅ **Distributed Scaling** – Works with **Redis Cluster** for large-scale applications.
+1. **Blazing-Fast Increments** – Handles millions of updates per second.
+2. **Atomic Operations** – Prevents race conditions in concurrent writes.
+3. **Memory Efficiency** – Uses small-sized keys and data structures (Hashes, HyperLogLog).
+4. **Auto-Expiry Support** – Avoids unnecessary data buildup for time-sensitive counters.
+5. **Distributed Scaling** – Works with **Redis Cluster** for large-scale applications.
 
 ### Cons of Using Redis for Counting
 
-❌ **Volatile Data** – Without persistence (`AOF` or `RDB`), data loss may occur on crashes.
-
-❌ **Memory Usage** – Large-scale counters (e.g., per-user per-hour tracking) can grow memory usage.
-
-❌ **Approximate Counts with HyperLogLog** – Not 100% accurate (though suitable for large-scale unique counts).
-
-❌ **No Advanced Querying** – Unlike SQL, Redis doesn’t support complex filters (e.g., "top liked posts with >100 comments").
+1. **Volatile Data** – Without persistence (`AOF` or `RDB`), data loss may occur on crashes.
+2. **Memory Usage** – Large-scale counters (e.g., per-user per-hour tracking) can grow memory usage.
+3. **Approximate Counts with HyperLogLog** – Not 100% accurate (though suitable for large-scale unique counts).
+4. **No Advanced Querying** – Unlike SQL, Redis doesn’t support complex filters (e.g., "top liked posts with >100 comments").
 
 ### Real-Life Examples of Redis Counting
 
@@ -698,27 +666,19 @@ else:
 
 ### Pros of Using Redis for Distributed Locks
 
-✅ **Fast Lock Acquisition** – O(1) time complexity ensures near-instant locking.
-
-✅ **Auto-Expiration Prevents Deadlocks** – Locks expire if the process crashes.
-
-✅ **Scales Across Multiple Servers** – Ensures mutual exclusion in distributed environments.
-
-✅ **Atomicity & Consistency** – SETNX ensures that only one client acquires a lock.
-
-✅ **Lightweight** – Unlike databases, Redis does not require complex transaction management.
+1. **Fast Lock Acquisition** – O(1) time complexity ensures near-instant locking.
+2. **Auto-Expiration Prevents Deadlocks** – Locks expire if the process crashes.
+3. **Scales Across Multiple Servers** – Ensures mutual exclusion in distributed environments.
+4. **Atomicity & Consistency** – SETNX ensures that only one client acquires a lock.
+5. **Lightweight** – Unlike databases, Redis does not require complex transaction management.
 
 ### Cons of Using Redis for Distributed Locks
 
-❌ **Single Point of Failure (Without Redlock)** – If Redis crashes, locks may be lost.
-
-❌ **Clock Skew Issues** – In distributed environments, different Redis nodes may have unsynchronized clocks.
-
-❌ **Not a Perfect Fit for Long Locks** – Since Redis is memory-based, long-held locks are inefficient.
-
-❌ **Network Partitioning Risks** – If a Redis node is isolated, locks may be incorrectly acquired or lost.
-
-❌ **Redlock Complexity** – Requires **multiple Redis instances** and **synchronization logic**.
+1. **Single Point of Failure (Without Redlock)** – If Redis crashes, locks may be lost.
+2. **Clock Skew Issues** – In distributed environments, different Redis nodes may have unsynchronized clocks.
+3. **Not a Perfect Fit for Long Locks** – Since Redis is memory-based, long-held locks are inefficient.
+4. **Network Partitioning Risks** – If a Redis node is isolated, locks may be incorrectly acquired or lost.
+5. **Redlock Complexity** – Requires **multiple Redis instances** and **synchronization logic**.
 
 ### Real-Life Examples of Redis Distributed Locks
 
@@ -830,25 +790,18 @@ Redis stores geospatial data using **Geohashes**, which represent locations as c
 
 ### Pros of Using Redis for Geospatial Indexing
 
-✅ **Fast Lookups** – Redis uses sorted sets (ZSETs) for efficient spatial queries.
-
-✅ **Simple & Built-In Support** – No need for an external GIS library.
-
-✅ **Scales Well** – Works with Redis Cluster for large-scale location data.
-
-✅ **Efficient Storage** – Uses Geohashes to compactly store coordinates.
-
-✅ **Atomic Updates** – Ensures consistent real-time location tracking.
+1. **Fast Lookups** – Redis uses sorted sets (ZSETs) for efficient spatial queries.
+2. **Simple & Built-In Support** – No need for an external GIS library.
+3. **Scales Well** – Works with Redis Cluster for large-scale location data.
+4. **Efficient Storage** – Uses Geohashes to compactly store coordinates.
+5. **Atomic Updates** – Ensures consistent real-time location tracking.
 
 ### Cons of Using Redis for Geospatial Indexing
 
-❌ **No Polygon or Complex Geospatial Queries** – Cannot handle **bounding boxes, custom-shaped areas, or intersections** (unlike PostGIS).
-
-❌ **No Altitude Support** – Only stores latitude & longitude (not elevation).
-
-❌ **Limited Precision** – Geohash precision varies based on zoom level.
-
-❌ **Not Ideal for Huge Datasets** – For massive spatial datasets, a dedicated **spatial database** (e.g., PostGIS, Google S2) might be better.
+1. **No Polygon or Complex Geospatial Queries** – Cannot handle **bounding boxes, custom-shaped areas, or intersections** (unlike PostGIS).
+2. **No Altitude Support** – Only stores latitude & longitude (not elevation).
+3. **Limited Precision** – Geohash precision varies based on zoom level.
+4. **Not Ideal for Huge Datasets** – For massive spatial datasets, a dedicated **spatial database** (e.g., PostGIS, Google S2) might be better.
 
 ### Real-Life Examples of Redis Geospatial Indexing
 
@@ -970,25 +923,20 @@ XADD notifications * message "User123 liked your post"
 
 ### Pros of Using Redis for Pub/Sub Messaging
 
-✅ **Blazing Fast** – In-memory operations enable real-time messaging.
-
-✅ **Lightweight & Simple** – No complex brokers or configurations needed.
-
-✅ **Scalable** – Works well for small-to-medium-scale distributed systems.
-
-✅ **Pattern Matching** – Supports flexible subscriptions using wildcards.
-
-✅ **Event Broadcasting** – Ideal for push notifications, real-time feeds, and dashboards.
+1. **Blazing Fast** – In-memory operations enable real-time messaging.
+2. **Lightweight & Simple** – No complex brokers or configurations needed.
+3. **Scalable** – Works well for small-to-medium-scale distributed systems.
+4. **Pattern Matching** – Supports flexible subscriptions using wildcards.
+5. **Event Broadcasting** – Ideal for push notifications, real-time feeds, and dashboards.
 
 ### Cons of Using Redis for Pub/Sub Messaging
 
-❌ **No Message Persistence** – Messages are lost if subscribers are offline (use **Redis Streams** for persistence).
+Here’s the numbered list for your new points:
 
-❌ **No Message Acknowledgment** – No built-in retry mechanism if a message is dropped.
-
-❌ **Limited Scalability for High Throughput** – Not ideal for massive-scale event-driven systems (Kafka, RabbitMQ may be better).
-
-❌ **Network Partition Risks** – If a Redis node fails, Pub/Sub messages may be lost.
+1. **No Message Persistence** – Messages are lost if subscribers are offline (use **Redis Streams** for persistence).
+2. **No Message Acknowledgment** – No built-in retry mechanism if a message is dropped.
+3. **Limited Scalability for High Throughput** – Not ideal for massive-scale event-driven systems (Kafka, RabbitMQ may be better).
+4. **Network Partition Risks** – If a Redis node fails, Pub/Sub messages may be lost.
 
 ### Real-Life Examples of Redis Pub/Sub Messaging
 
@@ -1085,25 +1033,18 @@ RPOPLPUSH job_queue processing_queue
 
 ### Pros of Using Redis for Job Queues
 
-✅ **Blazing Fast** – In-memory processing ensures low-latency task execution.
-
-✅ **Scalable** – Multiple workers can consume jobs concurrently.
-
-✅ **Reliable** – Can implement retries and processing acknowledgments.
-
-✅ **Simple Implementation** – Requires minimal setup compared to RabbitMQ or Kafka.
-
-✅ **Supports Priority Queues** – Using multiple lists for urgent vs normal jobs.
+1. **Blazing Fast** – In-memory processing ensures low-latency task execution.
+2. **Scalable** – Multiple workers can consume jobs concurrently.
+3. **Reliable** – Can implement retries and processing acknowledgments.
+4. **Simple Implementation** – Requires minimal setup compared to RabbitMQ or Kafka.
+5. **Supports Priority Queues** – Using multiple lists for urgent vs normal jobs.
 
 ### Cons of Using Redis for Job Queues
 
-❌ **No Built-In Job Persistence** – If Redis crashes, jobs can be lost (unless backed up).
-
-❌ **No Dead Letter Queue (DLQ)** – Failed jobs need manual reprocessing.
-
-❌ **Limited Visibility & Monitoring** – Lacks advanced tracking features found in Kafka/RabbitMQ.
-
-❌ **Memory Constraints** – Large job queues can fill up Redis memory quickly.
+1. **No Built-In Job Persistence** – If Redis crashes, jobs can be lost (unless backed up).
+2. **No Dead Letter Queue (DLQ)** – Failed jobs need manual reprocessing.
+3. **Limited Visibility & Monitoring** – Lacks advanced tracking features found in Kafka/RabbitMQ.
+4. **Memory Constraints** – Large job queues can fill up Redis memory quickly.
 
 ### Real-Life Examples of Redis Job Queues
 
@@ -1232,25 +1173,18 @@ Redis **Hashes** efficiently store and query session data for active users.
 
 ### Pros of Using Redis for Real-Time Analytics
 
-✅ **Lightning-Fast Processing** – In-memory operations ensure sub-millisecond latency.
-
-✅ **Scalability** – Supports millions of real-time events with Redis Cluster.
-
-✅ **Versatile Data Structures** – Optimized for counters, logs, rankings, and session tracking.
-
-✅ **Low Memory Usage** – HyperLogLog estimates large datasets with minimal space.
-
-✅ **Supports Streaming Analytics** – Redis Streams process high-throughput logs.
+1. **Lightning-Fast Processing** – In-memory operations ensure sub-millisecond latency.
+2. **Scalability** – Supports millions of real-time events with Redis Cluster.
+3. **Versatile Data Structures** – Optimized for counters, logs, rankings, and session tracking.
+4. **Low Memory Usage** – HyperLogLog estimates large datasets with minimal space.
+5. **Supports Streaming Analytics** – Redis Streams process high-throughput logs.
 
 ### Cons of Using Redis for Real-Time Analytics
 
-❌ **Volatile Data** – Data can be lost if not persisted (use **AOF or RDB snapshots**).
-
-❌ **Limited Querying Capabilities** – Not a full-fledged analytics database like ClickHouse or Druid.
-
-❌ **Memory Constraints** – Large datasets require careful memory management.
-
-❌ **No Complex Joins** – Unlike SQL databases, Redis lacks relational querying.
+1. **Volatile Data** – Data can be lost if not persisted (use **AOF or RDB snapshots**).
+2. **Limited Querying Capabilities** – Not a full-fledged analytics database like ClickHouse or Druid.
+3. **Memory Constraints** – Large datasets require careful memory management.
+4. **No Complex Joins** – Unlike SQL databases, Redis lacks relational querying.
 
 ### Real-Life Examples of Redis for Real-Time Analytics
 
@@ -1355,29 +1289,20 @@ SLAVEOF <master-ip> <master-port>
 
 ### Pros of Using Redis as a Primary Database
 
-✅ **Blazing Fast Read/Write Performance** – Sub-millisecond latency.
-
-✅ **Scalability** – Redis Cluster supports sharding and replication.
-
-✅ **Flexible Data Structures** – Supports key-value, lists, hashes, streams, and more.
-
-✅ **Persistence Mechanisms** – AOF and RDB ensure data durability.
-
-✅ **Built-in Pub/Sub** – Supports event-driven architectures.
-
-✅ **Low Latency Geospatial Queries** – Optimized for real-time location services.
+1. **Blazing Fast Read/Write Performance** – Sub-millisecond latency.
+2. **Scalability** – Redis Cluster supports sharding and replication.
+3. **Flexible Data Structures** – Supports key-value, lists, hashes, streams, and more.
+4. **Persistence Mechanisms** – AOF and RDB ensure data durability.
+5. **Built-in Pub/Sub** – Supports event-driven architectures.
+6. **Low Latency Geospatial Queries** – Optimized for real-time location services.
 
 ### Cons of Using Redis as a Primary Database
 
-❌ **Memory Constraints** – Being an in-memory database, large datasets require expensive RAM.
-
-❌ **Lacks Complex Querying** – No support for SQL-style joins or ACID transactions.
-
-❌ **Data Persistence Overhead** – AOF and RDB add storage and CPU overhead.
-
-❌ **Not Ideal for Large Datasets** – Scaling beyond RAM limits requires Redis on Flash or external storage.
-
-❌ **Limited Security Features** – No built-in access control mechanisms beyond basic authentication.
+1. **Memory Constraints** – Being an in-memory database, large datasets require expensive RAM.
+2. **Lacks Complex Querying** – No support for SQL-style joins or ACID transactions.
+3. **Data Persistence Overhead** – AOF and RDB add storage and CPU overhead.
+4. **Not Ideal for Large Datasets** – Scaling beyond RAM limits requires Redis on Flash or external storage.
+5. **Limited Security Features** – No built-in access control mechanisms beyond basic authentication.
 
 ### Real-Life Examples of Redis as a Primary Database
 
@@ -1408,3 +1333,624 @@ Here’s a **comprehensive summary table** of all Redis use cases discussed in t
 | **Job Queues (Background Tasks)** | Uses **Lists (LPUSH, BRPOP)** or **Streams** to queue tasks. | ✅ Asynchronous processing  ✅ Reliable task queues  ✅ Low-latency processing | ❌ No built-in retries  ❌ Needs external worker management | 📧 **Email Sending (Gmail, Mailchimp)**  🎬 **Video Processing (YouTube, Netflix)** |
 | **Real-Time Analytics** | Uses **INCR, HyperLogLog, Streams** for live dashboards. | ✅ Fast real-time aggregation  ✅ Efficient event processing  ✅ Supports high-throughput logging | ❌ Memory-heavy for large-scale analytics  ❌ No advanced querying like SQL | 📈 **Stock Trading (Robinhood, Bloomberg)**  🔍 **Fraud Detection (PayPal, Visa)** |
 | **Primary Database** | Stores **all** data in-memory with persistence. | ✅ Ultra-fast queries  ✅ Flexible data structures  ✅ High availability with clustering | ❌ Memory constraints  ❌ No complex querying (no joins) | 🎮 **Gaming (Session states, leaderboards)**  💬 **Chat apps (WhatsApp, Slack)** |
+
+# Code Implementation Examples
+
+### Redis - Caching
+
+```java
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.concurrent.TimeUnit;
+
+@SpringBootApplication
+public class RedisCacheApp {
+    public static void main(String[] args) {
+        SpringApplication.run(RedisCacheApp.class, args);
+    }
+
+    // Configure Redis connection using Jedis
+    @Bean
+    public RedisConnectionFactory redisConnectionFactory() {
+        return new JedisConnectionFactory();
+    }
+
+    // Configure RedisTemplate for key-value operations
+    @Bean
+    public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory factory) {
+        RedisTemplate<String, String> template = new RedisTemplate<>();
+        template.setConnectionFactory(factory);
+        template.setKeySerializer(new StringRedisSerializer());  // Serialize keys as Strings
+        template.setValueSerializer(new StringRedisSerializer()); // Serialize values as Strings
+        return template;
+    }
+}
+
+@RestController
+@RequestMapping("/cache")
+class CacheController {
+    private final RedisTemplate<String, String> redisTemplate;
+
+    public CacheController(RedisTemplate<String, String> redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
+
+    // Store key-value pair in Redis with 10-minute expiration
+    @PostMapping("/{key}/{value}")
+    public String setCache(@PathVariable String key, @PathVariable String value) {
+        redisTemplate.opsForValue().set(key, value, 10, TimeUnit.MINUTES);  // Set key with TTL
+        return "Cached: " + key;
+    }
+
+    // Retrieve value from Redis cache
+    @GetMapping("/{key}")
+    public String getCache(@PathVariable String key) {
+        String value = redisTemplate.opsForValue().get(key);
+        return value != null ? "Value: " + value : "Key not found!";
+    }
+
+    // Remove key-value pair from Redis
+    @DeleteMapping("/{key}")
+    public String deleteCache(@PathVariable String key) {
+        redisTemplate.delete(key);
+        return "Deleted: " + key;
+    }
+}
+```
+
+### Redis - Session Storage
+
+```java
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpSession;
+
+@SpringBootApplication
+@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 1800) // Enables Redis-backed session storage (30 min timeout)
+public class RedisSessionApp {
+    public static void main(String[] args) {
+        SpringApplication.run(RedisSessionApp.class, args);
+    }
+
+    // Configure Redis connection using Jedis
+    @Bean
+    public RedisConnectionFactory redisConnectionFactory() {
+        return new JedisConnectionFactory();
+    }
+}
+
+@RestController
+@RequestMapping("/session")
+class SessionController {
+
+    // Store data in Redis-backed session
+    @PostMapping("/set/{key}/{value}")
+    public String setSessionData(@PathVariable String key, @PathVariable String value, HttpSession session) {
+        session.setAttribute(key, value); // Store in session (Redis will handle storage)
+        return "Session Key '" + key + "' stored with value: " + value;
+    }
+
+    // Retrieve data from Redis-backed session
+    @GetMapping("/get/{key}")
+    public String getSessionData(@PathVariable String key, HttpSession session) {
+        Object value = session.getAttribute(key);
+        return value != null ? "Session Value: " + value : "No session data found for key: " + key;
+    }
+
+    // Remove session data
+    @DeleteMapping("/remove/{key}")
+    public String removeSessionData(@PathVariable String key, HttpSession session) {
+        session.removeAttribute(key);
+        return "Session Key '" + key + "' removed.";
+    }
+}
+```
+
+### Redis - Rate Limiting
+
+```java
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.web.bind.annotation.*;
+import redis.clients.jedis.Jedis;
+
+import java.time.Instant;
+
+@SpringBootApplication
+public class RedisRateLimiterApp {
+    public static void main(String[] args) {
+        SpringApplication.run(RedisRateLimiterApp.class, args);
+    }
+
+    // Configure Redis connection using Jedis
+    @Bean
+    public RedisConnectionFactory redisConnectionFactory() {
+        return new JedisConnectionFactory();
+    }
+}
+
+@RestController
+@RequestMapping("/rate-limit")
+class RateLimiterController {
+    private static final String REDIS_KEY_PREFIX = "rate_limit:";
+    private static final int MAX_TOKENS = 10;  // Max requests allowed
+    private static final int REFILL_RATE = 1;  // Tokens added per second
+
+    private final Jedis jedis = new Jedis("localhost", 6379); // Connect to Redis
+
+    @GetMapping("/{userId}")
+    public String accessResource(@PathVariable String userId) {
+        String key = REDIS_KEY_PREFIX + userId;
+        long currentTime = Instant.now().getEpochSecond();
+
+        // Get current token bucket info
+        String[] tokenData = jedis.hmget(key, "tokens", "last_refill").toArray(new String[0]);
+        int tokens = tokenData[0] != null ? Integer.parseInt(tokenData[0]) : MAX_TOKENS;
+        long lastRefill = tokenData[1] != null ? Long.parseLong(tokenData[1]) : currentTime;
+
+        // Refill tokens
+        long elapsedTime = currentTime - lastRefill;
+        int newTokens = Math.min(MAX_TOKENS, tokens + (int) (elapsedTime * REFILL_RATE));
+
+        // Check if request is allowed
+        if (newTokens > 0) {
+            jedis.hset(key, "tokens", String.valueOf(newTokens - 1));
+            jedis.hset(key, "last_refill", String.valueOf(currentTime));
+            jedis.expire(key, 60);  // Set TTL to prevent unused data buildup
+            return "Request allowed. Remaining tokens: " + (newTokens - 1);
+        } else {
+            return "Rate limit exceeded. Try again later.";
+        }
+    }
+}
+```
+
+### Redis - Leaderboard
+
+```java
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.bind.annotation.*;
+import redis.clients.jedis.Jedis;
+
+import java.util.Set;
+import java.util.stream.Collectors;
+
+@SpringBootApplication
+public class RedisLeaderboardApp {
+    public static void main(String[] args) {
+        SpringApplication.run(RedisLeaderboardApp.class, args);
+    }
+}
+
+@RestController
+@RequestMapping("/leaderboard")
+class LeaderboardController {
+    private static final String LEADERBOARD_KEY = "game_leaderboard";  // Redis Sorted Set key
+    private final Jedis jedis = new Jedis("localhost", 6379); // Connect to Redis
+
+    // Add or update a player's score in the leaderboard
+    @PostMapping("/add/{player}/{score}")
+    public String addScore(@PathVariable String player, @PathVariable double score) {
+        jedis.zadd(LEADERBOARD_KEY, score, player);  // Add player with score
+        return "Score updated: " + player + " -> " + score;
+    }
+
+    // Get the top N players from the leaderboard
+    @GetMapping("/top/{count}")
+    public Set<String> getTopPlayers(@PathVariable int count) {
+        return jedis.zrevrangeWithScores(LEADERBOARD_KEY, 0, count - 1)
+                .stream()
+                .map(entry -> entry.getElement() + " - " + entry.getScore())
+                .collect(Collectors.toSet());
+    }
+
+    // Get the rank of a specific player
+    @GetMapping("/rank/{player}")
+    public String getPlayerRank(@PathVariable String player) {
+        Long rank = jedis.zrevrank(LEADERBOARD_KEY, player);
+        return rank != null ? player + " is ranked #" + (rank + 1) : "Player not found.";
+    }
+}
+```
+
+### Redis - Counting (Views, Likes, Upvotes)
+
+```java
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.*;
+import redis.clients.jedis.Jedis;
+
+@SpringBootApplication
+public class RedisCountingApp {
+    public static void main(String[] args) {
+        SpringApplication.run(RedisCountingApp.class, args);
+    }
+}
+
+@RestController
+@RequestMapping("/count")
+class CounterController {
+    private static final String VIEW_KEY_PREFIX = "views:";
+    private static final String LIKE_KEY_PREFIX = "likes:";
+    private static final String UPVOTE_KEY_PREFIX = "upvotes:";
+    
+    private final Jedis jedis = new Jedis("localhost", 6379); // Connect to Redis
+
+    // Increment view count for a post
+    @PostMapping("/view/{postId}")
+    public String incrementView(@PathVariable String postId) {
+        long views = jedis.incr(VIEW_KEY_PREFIX + postId);
+        return "Post " + postId + " has " + views + " views.";
+    }
+
+    // Increment like count for a post
+    @PostMapping("/like/{postId}")
+    public String incrementLike(@PathVariable String postId) {
+        long likes = jedis.incr(LIKE_KEY_PREFIX + postId);
+        return "Post " + postId + " has " + likes + " likes.";
+    }
+
+    // Increment upvote count for a comment
+    @PostMapping("/upvote/{commentId}")
+    public String incrementUpvote(@PathVariable String commentId) {
+        long upvotes = jedis.incr(UPVOTE_KEY_PREFIX + commentId);
+        return "Comment " + commentId + " has " + upvotes + " upvotes.";
+    }
+
+    // Get current counts for a post
+    @GetMapping("/stats/{postId}")
+    public String getPostStats(@PathVariable String postId) {
+        long views = Long.parseLong(jedis.get(VIEW_KEY_PREFIX + postId) != null ? jedis.get(VIEW_KEY_PREFIX + postId) : "0");
+        long likes = Long.parseLong(jedis.get(LIKE_KEY_PREFIX + postId) != null ? jedis.get(LIKE_KEY_PREFIX + postId) : "0");
+        return "Post " + postId + " Stats -> Views: " + views + ", Likes: " + likes;
+    }
+}
+```
+
+### Redis - Distributed Locks
+
+```java
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.*;
+import redis.clients.jedis.Jedis;
+
+import java.util.UUID;
+
+@SpringBootApplication
+public class RedisDistributedLockApp {
+    public static void main(String[] args) {
+        SpringApplication.run(RedisDistributedLockApp.class, args);
+    }
+}
+
+@RestController
+@RequestMapping("/lock")
+class DistributedLockController {
+    private static final String LOCK_KEY = "resource_lock";
+    private static final int LOCK_EXPIRY = 10; // Lock expiry time in seconds
+
+    private final Jedis jedis = new Jedis("localhost", 6379); // Connect to Redis
+
+    // Acquire lock before processing a critical task
+    @PostMapping("/acquire")
+    public String acquireLock() {
+        String lockValue = UUID.randomUUID().toString(); // Unique lock identifier
+
+        // Attempt to acquire the lock using SETNX with an expiration time
+        String result = jedis.set(LOCK_KEY, lockValue, "NX", "EX", LOCK_EXPIRY);
+        if ("OK".equals(result)) {
+            return "Lock acquired successfully: " + lockValue;
+        } else {
+            return "Failed to acquire lock. Resource is locked.";
+        }
+    }
+
+    // Release lock after processing
+    @PostMapping("/release/{lockValue}")
+    public String releaseLock(@PathVariable String lockValue) {
+        // Ensure that the lock being released belongs to the requester
+        if (lockValue.equals(jedis.get(LOCK_KEY))) {
+            jedis.del(LOCK_KEY);
+            return "Lock released successfully.";
+        } else {
+            return "Lock release failed. Invalid or expired lock.";
+        }
+    }
+}
+```
+
+Redlock Example
+
+```java
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.*;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+
+import java.util.List;
+import java.util.UUID;
+
+@SpringBootApplication
+public class RedisRedlockApp {
+    public static void main(String[] args) {
+        SpringApplication.run(RedisRedlockApp.class, args);
+    }
+}
+
+@RestController
+@RequestMapping("/redlock")
+class RedlockController {
+    private final List<JedisPool> redisInstances = List.of(
+        new JedisPool("localhost", 6379),  // First Redis instance
+        new JedisPool("localhost", 6380),  // Second Redis instance
+        new JedisPool("localhost", 6381)   // Third Redis instance
+    );
+
+    private static final String LOCK_KEY = "distributed_lock";
+    private static final int LOCK_EXPIRY = 10_000; // 10 seconds (in milliseconds)
+    private static final int QUORUM = 2; // Majority of instances
+
+    // Acquire Redlock
+    @PostMapping("/acquire")
+    public String acquireLock() {
+        String lockValue = UUID.randomUUID().toString(); // Unique lock identifier
+        int acquiredCount = 0;
+        long startTime = System.currentTimeMillis();
+
+        // Try to acquire lock on each Redis instance
+        for (JedisPool pool : redisInstances) {
+            try (Jedis jedis = pool.getResource()) {
+                String result = jedis.set(LOCK_KEY, lockValue, "NX", "PX", LOCK_EXPIRY);
+                if ("OK".equals(result)) {
+                    acquiredCount++;
+                }
+            }
+        }
+
+        // Check if we acquired the majority of locks
+        if (acquiredCount >= QUORUM) {
+            return "Lock acquired successfully: " + lockValue;
+        } else {
+            releaseLock(lockValue); // Rollback if failed
+            return "Failed to acquire lock.";
+        }
+    }
+
+    // Release Redlock
+    @PostMapping("/release/{lockValue}")
+    public String releaseLock(@PathVariable String lockValue) {
+        int releasedCount = 0;
+
+        // Try to release the lock from all instances
+        for (JedisPool pool : redisInstances) {
+            try (Jedis jedis = pool.getResource()) {
+                if (lockValue.equals(jedis.get(LOCK_KEY))) {  // Verify lock ownership
+                    jedis.del(LOCK_KEY);
+                    releasedCount++;
+                }
+            }
+        }
+
+        return (releasedCount >= QUORUM) ? "Lock released successfully." : "Lock release failed.";
+    }
+}
+```
+
+### Redis - Geospatial Indexing
+
+```java
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.*;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.GeoCoordinate;
+import redis.clients.jedis.GeoRadiusResponse;
+import redis.clients.jedis.params.GeoRadiusParam;
+
+import java.util.List;
+
+@SpringBootApplication
+public class RedisGeospatialApp {
+    public static void main(String[] args) {
+        SpringApplication.run(RedisGeospatialApp.class, args);
+    }
+}
+
+@RestController
+@RequestMapping("/geo")
+class GeoSpatialController {
+    private static final String GEO_KEY = "locations"; // Redis key for geospatial data
+    private final Jedis jedis = new Jedis("localhost", 6379); // Connect to Redis
+
+    // Add a location with latitude & longitude
+    @PostMapping("/add/{name}/{lat}/{lon}")
+    public String addLocation(@PathVariable String name, @PathVariable double lat, @PathVariable double lon) {
+        jedis.geoadd(GEO_KEY, lon, lat, name);
+        return "Added location: " + name + " at [" + lat + ", " + lon + "]";
+    }
+
+    // Find locations within a given radius
+    @GetMapping("/nearby/{lat}/{lon}/{radius}")
+    public String findNearby(@PathVariable double lat, @PathVariable double lon, @PathVariable double radius) {
+        List<GeoRadiusResponse> results = jedis.georadius(GEO_KEY, lon, lat, radius, redis.clients.jedis.args.GeoUnit.KM, GeoRadiusParam.geoRadiusParam().withDist());
+
+        StringBuilder response = new StringBuilder("Nearby locations:\n");
+        for (GeoRadiusResponse res : results) {
+            response.append(res.getMemberByString()).append(" - ").append(res.getDistance()).append(" km\n");
+        }
+
+        return response.toString();
+    }
+
+    // Get the distance between two locations
+    @GetMapping("/distance/{place1}/{place2}")
+    public String getDistance(@PathVariable String place1, @PathVariable String place2) {
+        Double distance = jedis.geodist(GEO_KEY, place1, place2, redis.clients.jedis.args.GeoUnit.KM);
+        return distance != null ? "Distance between " + place1 + " and " + place2 + " is " + distance + " km" : "Locations not found.";
+    }
+
+    // Get the GeoHash of a location
+    @GetMapping("/geohash/{name}")
+    public String getGeoHash(@PathVariable String name) {
+        List<String> hash = jedis.geohash(GEO_KEY, name);
+        return "GeoHash for " + name + ": " + hash;
+    }
+
+    // Get the latitude and longitude of a location
+    @GetMapping("/position/{name}")
+    public String getPosition(@PathVariable String name) {
+        List<GeoCoordinate> coordinates = jedis.geopos(GEO_KEY, name);
+        return coordinates != null && !coordinates.isEmpty() ? "Coordinates for " + name + ": " + coordinates.get(0).getLatitude() + ", " + coordinates.get(0).getLongitude() : "Location not found.";
+    }
+}
+```
+
+### Redis - Pub/Sub Messaging
+
+```java
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPubSub;
+
+// Publisher Class
+class RedisPublisher {
+    private final Jedis jedis;
+    private final String channel;
+
+    public RedisPublisher(String redisHost, int redisPort, String channel) {
+        this.jedis = new Jedis(redisHost, redisPort); // Connect to Redis
+        this.channel = channel;
+    }
+
+    public void publishMessage(String message) {
+        jedis.publish(channel, message); // Publish message to channel
+        System.out.println("Published: " + message);
+    }
+}
+
+// Subscriber Class
+class RedisSubscriber extends JedisPubSub {
+    @Override
+    public void onMessage(String channel, String message) {
+        System.out.println("Received on " + channel + ": " + message);
+    }
+}
+
+// Main Class to Run Publisher & Subscriber
+public class RedisPubSubApp {
+    public static void main(String[] args) throws InterruptedException {
+        String redisHost = "localhost";
+        int redisPort = 6379;
+        String channel = "notifications";
+
+        // Start Subscriber in a New Thread
+        new Thread(() -> {
+            try (Jedis jedis = new Jedis(redisHost, redisPort)) {
+                RedisSubscriber subscriber = new RedisSubscriber();
+                System.out.println("Subscribed to channel: " + channel);
+                jedis.subscribe(subscriber, channel); // Listen for messages
+            }
+        }).start();
+
+        // Wait for Subscriber to Start
+        Thread.sleep(2000);
+
+        // Publish Messages
+        RedisPublisher publisher = new RedisPublisher(redisHost, redisPort, channel);
+        publisher.publishMessage("Hello, Redis Pub/Sub!");
+        publisher.publishMessage("New Event: User Joined");
+        publisher.publishMessage("Breaking News: Redis is awesome!");
+    }
+}
+```
+
+### Redis - Job Queues (Background Tasks)
+
+```java
+import redis.clients.jedis.Jedis;
+
+// Producer (Adds Jobs to Queue)
+class JobProducer {
+    private final Jedis jedis;
+    private final String queueName;
+
+    public JobProducer(String redisHost, int redisPort, String queueName) {
+        this.jedis = new Jedis(redisHost, redisPort); // Connect to Redis
+        this.queueName = queueName;
+    }
+
+    public void enqueueJob(String jobData) {
+        jedis.lpush(queueName, jobData); // Push job to queue
+        System.out.println("Job Enqueued: " + jobData);
+    }
+}
+
+// Worker (Processes Jobs from Queue)
+class JobWorker {
+    private final Jedis jedis;
+    private final String queueName;
+
+    public JobWorker(String redisHost, int redisPort, String queueName) {
+        this.jedis = new Jedis(redisHost, redisPort); // Connect to Redis
+        this.queueName = queueName;
+    }
+
+    public void processJobs() {
+        System.out.println("Worker Started - Waiting for jobs...");
+        while (true) {
+            String job = jedis.brpop(0, queueName).get(1); // Blocking pop
+            System.out.println("Processing Job: " + job);
+            try {
+                Thread.sleep(2000); // Simulate task processing time
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            System.out.println("Job Completed: " + job);
+        }
+    }
+}
+
+// Main Class to Run Producer & Worker
+public class RedisJobQueueApp {
+    public static void main(String[] args) throws InterruptedException {
+        String redisHost = "localhost";
+        int redisPort = 6379;
+        String queueName = "jobQueue";
+
+        // Start Worker in a New Thread
+        new Thread(() -> {
+            JobWorker worker = new JobWorker(redisHost, redisPort, queueName);
+            worker.processJobs();
+        }).start();
+
+        // Wait for Worker to Start
+        Thread.sleep(2000);
+
+        // Produce Jobs
+        JobProducer producer = new JobProducer(redisHost, redisPort, queueName);
+        producer.enqueueJob("Task 1: Email Notification");
+        producer.enqueueJob("Task 2: Generate Report");
+        producer.enqueueJob("Task 3: Data Processing");
+    }
+}
+```
