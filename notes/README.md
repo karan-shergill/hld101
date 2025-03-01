@@ -14,11 +14,9 @@
 | [API Protocol](https://github.com/karan-shergill/hld101/blob/main/notes/api_protocols.md) | `SOAP`, `REST`, `GraphQL`, `gRPC`, `WebSocket`, `Webhook`, `REST APIs - HTTP Methods`, `REST API Request Structure`, `Query Parameters`, `Headers`, `Request Body`, `HTTP Status Codes`, `Authentication in REST APIs`, `REST API Best Practices`, `Pagination in REST APIs`, `Pagination types (Offset-Based, Cursor-Based, Page-Based)`, `How Does GraphQL Work`, `Schema`, `Resolvers`, `When to use which API Protocol` |
 
 # Topics I need to deep dive
-1. Design User Rating and Review System
-3. Bases on database size what desisions one takes
-4. Choosing right database
-5. How Search bar works with filters?
-6. ~~Where all I can use Redis in my system?~~
-7. ~~Good API design practice for interviews~~
-8. Database keys
-9. Database table design
+* Manage WRITE heavy system
+* Manage READ heavy system
+* Database keys
+* Database table design
+* Choosing right database
+
