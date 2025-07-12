@@ -1,81 +1,83 @@
-# 🏗️ High Level System Design Mastery
+# High Level System Design
 
 [![System Design](https://img.shields.io/badge/System%20Design-Expert%20Level-blue?style=for-the-badge&logo=architecture&logoColor=white)](https://github.com)
 [![Distributed Systems](https://img.shields.io/badge/Distributed%20Systems-Advanced-green?style=for-the-badge&logo=network-wired&logoColor=white)](https://github.com)
 [![Scalability](https://img.shields.io/badge/Scalability-Production%20Ready-orange?style=for-the-badge&logo=chart-line&logoColor=white)](https://github.com)
 
-> **A comprehensive guide to mastering High Level System Design concepts, patterns, and best practices for building scalable, reliable, and maintainable distributed systems.**
+## Table of Contents
 
-## 🗂️ Table of Contents
-
-- [🏗️ High Level System Design Mastery](#️-high-level-system-design-mastery)
-  - [📊 Quick Overview](#-quick-overview)
-  - [🗂️ Table of Contents](#️-table-of-contents)
-  - [🔤 Core Terminologies](#-core-terminologies)
-  - [🏛️ System Design Fundamentals](#️-system-design-fundamentals)
-    - [🌐 Networking & Communication](#-networking--communication)
-    - [⚖️ Load Management & Distribution](#️-load-management--distribution)
-    - [🗄️ Data Storage & Management](#️-data-storage--management)
-    - [🔗 Integration & Messaging](#-integration--messaging)
-    - [🏗️ Architecture Patterns](#️-architecture-patterns)
-    - [🔐 Security & Authentication](#-security--authentication)
-    - [📡 Communication Protocols](#-communication-protocols)
-    - [🛠️ Infrastructure & Deployment](#️-infrastructure--deployment)
-    - [📈 Advanced Concepts](#-advanced-concepts)
-  - [📚 Study Guide & Best Practices](#-study-guide--best-practices)
-
----
-
-## 🔤 Core Terminologies
-
-### 📈 **System Quality Attributes**
-| 🎯 **Concept** | 📝 **Definition** | 🔗 **Resources** |
-|-------------|------------------|------------------|
-| **🔄 Availability** | The measure of a system's ability to be operational and accessible when required for use | [[Video](https://youtu.be/LdvduBxZRLs)] [[Article](https://blog.bytebytego.com/p/how-do-we-design-for-high-availability)] |
-| **🛡️ Reliability** | The ability of a system to consistently perform its intended functions without failure over a specified period | [[Video](https://youtu.be/y_Orb2euMo0?list=PLBgdlMZhIRmExB642Hb7JeW8aBCA-m3PS)] [[Article](https://www.prepbytes.com/blog/system-design/reliability-in-system-design/)] |
-| **📊 Scalability** | The capability of a system to handle increased load or expand in capacity without compromising performance | [[Video](https://youtu.be/-CAuaHEJD8E?list=PLBgdlMZhIRmExB642Hb7JeW8aBCA-m3PS)] [[Article](https://www.educative.io/answers/scalability-in-system-design)] |
-| **🔄 Maintainability** | The ease with which a system can be updated, repaired, or improved over its lifecycle | [[Video](https://youtu.be/epf1eLbbBl8?list=PLBgdlMZhIRmExB642Hb7JeW8aBCA-m3PS)] [[Article](https://medium.com/oolooroo/crafting-highly-maintainable-systems-practices-patterns-and-principles-part-1-163202fee62c)] |
-
-### 🎯 **Performance Metrics**
-| 🎯 **Concept** | 📝 **Definition** | 🔗 **Resources** |
-|-------------|------------------|------------------|
-| **⚡ Latency** | The time delay between a request being made and the corresponding response being received | [[Video](https://youtu.be/YSL8wJNLA58?list=PLBgdlMZhIRmExB642Hb7JeW8aBCA-m3PS)] [[Article](https://www.enjoyalgorithms.com/blog/latency-in-system-design)] |
-| **📊 Throughput** | The rate at which a system processes requests or completes tasks, typically measured in units per time | [[Video](https://youtu.be/IhemzDuCwgU)] [[Article](https://www.enjoyalgorithms.com/blog/throughput-in-system-design)] |
-| **📈 Percentile Latency** | p99, p95, p50 latency representing performance at various percentiles of requests | [[Video](https://youtu.be/BrzhaXSEWy8)] [[Article](https://medium.com/@djsmith42/how-to-metric-edafaf959fc7)] |
-| **📋 SLA, SLO & SLI** | Service Level Agreement, Objectives, and Indicators for measuring service quality | [[Video](https://youtu.be/HZwmF47OPMk?list=PLBgdlMZhIRmExB642Hb7JeW8aBCA-m3PS)] [[Article](https://www.blameless.com/blog/sla-vs-slo)] |
-
-### 🔧 **Data Consistency & Transactions**
-| 🎯 **Concept** | 📝 **Definition** | 🔗 **Resources** |
-|-------------|------------------|------------------|
-| **🔄 Consistency** | The property ensuring all nodes have the same data at the same time across distributed systems | [[Video](https://youtu.be/e_HjDt6AA8s?list=PLBgdlMZhIRmExB642Hb7JeW8aBCA-m3PS)] [[Article](https://medium.com/javarevisited/system-design-1-consistency-in-distributed-systems-a-fundamental-challenge-023616039819)] |
-| **⚛️ Atomicity** | Operations within a transaction are completed entirely or not at all, maintaining consistency | [[Video](https://youtu.be/w4rGJ9QylNU?list=PLBgdlMZhIRmExB642Hb7JeW8aBCA-m3PS)] [[Article](https://www.freecodecamp.org/news/acid-databases-explained/)] |
-| **🔒 Isolation** | Transactions operate independently without interference from other concurrent transactions | [[Video](https://youtu.be/U-4tjScxc_Q?list=PLBgdlMZhIRmExB642Hb7JeW8aBCA-m3PS)] [[Article](https://www.freecodecamp.org/news/acid-databases-explained/)] |
-| **💾 Durability** | Once a transaction is committed, its changes are permanent and survive system failures | [[Video](https://youtu.be/FWuK7uhlYBs?list=PLBgdlMZhIRmExB642Hb7JeW8aBCA-m3PS)] [[Article](https://www.freecodecamp.org/news/acid-databases-explained/)] |
-
-### 🛡️ **Fault Handling & Recovery**
-| 🎯 **Concept** | 📝 **Definition** | 🔗 **Resources** |
-|-------------|------------------|------------------|
-| **⚠️ Faults** | Defects or issues in system components that have potential to cause errors | [[Video](https://youtu.be/l1wBr-MZnPQ?list=PLBgdlMZhIRmExB642Hb7JeW8aBCA-m3PS)] [[Article](https://www.baeldung.com/cs/distributed-systems-fault-failure)] |
-| **💥 Failures** | Events where a system fails to perform its intended function, causing service disruption | [[Video](https://youtu.be/l1wBr-MZnPQ?list=PLBgdlMZhIRmExB642Hb7JeW8aBCA-m3PS)] [[Article](https://www.baeldung.com/cs/distributed-systems-fault-failure)] |
-| **🔄 Failover** | Automatic switch to backup system when primary system fails, ensuring continuous operation | [[Video](https://youtu.be/02pg0GJky9I?list=PLBgdlMZhIRmExB642Hb7JeW8aBCA-m3PS)] [[Article](https://cloudpatterns.org/mechanisms/failover_system/)] |
-| **⛓️ Cascading Failure** | Chain reaction of failures in interconnected parts leading to widespread system outage | [[Video](https://youtu.be/oVGOUh6-m4E?list=PLBgdlMZhIRmExB642Hb7JeW8aBCA-m3PS)] [[Article](https://www.infoq.com/articles/anatomy-cascading-failure/)] |
-| **🏥 Resiliency** | Ability to recover from failures and continue operating with minimal impact | [[Video](https://youtu.be/kS06YB_K8n0?list=PLBgdlMZhIRmExB642Hb7JeW8aBCA-m3PS)] [[Article](https://insights.sei.cmu.edu/blog/system-resilience-what-exactly-is-it/)] |
-| **🛡️ Fault Tolerance** | Ability to continue operating correctly even when components fail | [[Video](https://youtu.be/DNam6NbjgW4?list=PLBgdlMZhIRmExB642Hb7JeW8aBCA-m3PS)] [[Article](https://www.cockroachlabs.com/blog/what-is-fault-tolerance/)] |
-
-### 🔗 **System Integration & Communication**
-| 🎯 **Concept** | 📝 **Definition** | 🔗 **Resources** |
-|-------------|------------------|------------------|
-| **⬆️⬇️ Upstream/Downstream** | Systems providing data (upstream) vs systems receiving data (downstream) | [[Video](https://youtu.be/XpZpJi4wEsY?list=PLBgdlMZhIRmExB642Hb7JeW8aBCA-m3PS)] [[Article](https://reflectoring.io/upstream-downstream/)] |
-| **🔄 Sync vs Async** | Real-time communication (sync) vs non-blocking communication (async) | [[Video](https://youtu.be/aCzZKlRL4q8?list=PLBgdlMZhIRmExB642Hb7JeW8aBCA-m3PS)] [[Article](https://medium.com/inspiredbrilliance/patterns-for-microservices-e57a2d71ff9e)] |
-| **⚖️ Fault Tolerance vs Resiliency** | Continuous operation despite faults vs recovery and adaptation after disruptions | [[Video](https://youtu.be/rpBPMFk1ah0?list=PLBgdlMZhIRmExB642Hb7JeW8aBCA-m3PS)] [[Article](https://www.ufried.com/blog/resilience_vs_fault_tolerance/)] |
+- [**Core Terminologies**](#core-terminologies)
+    - [**System Quality Attributes**](#system-quality-attributes)
+    - [**Performance Metrics**](#performance-metrics)
+    - [**Data Consistency & Transactions**](#data-consistency--transactions)
+    - [**Fault Handling & Recovery**](#fault-handling--recovery)
+    - [**System Integration & Communication**](#system-integration--communication)
+- [**System Design Fundamentals**](#system-design-fundamentals)
+    - [**Networking & Communication**](#networking--communication)
+- [**Study Guide & Best Practices**](#study-guide--best-practices)
+    - [**System Design Interview Strategy**](#system-design-interview-strategy)
+    - [**Best Practices & Design Principles**](#best-practices--design-principles)
+        - [**Performance Optimization**](#performance-optimization)
+        - [**Reliability & Resilience**](#reliability--resilience)
+        - [**Scalability Guidelines**](#scalability-guidelines)
+    - [**Common System Design Patterns**](#common-system-design-patterns)
+    - [**Key Metrics to Consider**](#key-metrics-to-consider)
+        - [**Performance Metrics**](#performance-metrics)
+        - [**Business Metrics**](#business-metrics)
+    - [**Interview Success Tips**](#interview-success-tips)
 
 ---
 
-## 🏛️ System Design Fundamentals
+## Core Terminologies
+
+### **System Quality Attributes**
+| **Concept** | **Definition** | **Resources** |
+|-------------|------------------|------------------|
+| **Availability** | The measure of a system's ability to be operational and accessible when required for use | [[Video](https://youtu.be/LdvduBxZRLs)] [[Article](https://blog.bytebytego.com/p/how-do-we-design-for-high-availability)] |
+| **Reliability** | The ability of a system to consistently perform its intended functions without failure over a specified period | [[Video](https://youtu.be/y_Orb2euMo0?list=PLBgdlMZhIRmExB642Hb7JeW8aBCA-m3PS)] [[Article](https://www.prepbytes.com/blog/system-design/reliability-in-system-design/)] |
+| **Scalability** | The capability of a system to handle increased load or expand in capacity without compromising performance | [[Video](https://youtu.be/-CAuaHEJD8E?list=PLBgdlMZhIRmExB642Hb7JeW8aBCA-m3PS)] [[Article](https://www.educative.io/answers/scalability-in-system-design)] |
+| **Maintainability** | The ease with which a system can be updated, repaired, or improved over its lifecycle | [[Video](https://youtu.be/epf1eLbbBl8?list=PLBgdlMZhIRmExB642Hb7JeW8aBCA-m3PS)] [[Article](https://medium.com/oolooroo/crafting-highly-maintainable-systems-practices-patterns-and-principles-part-1-163202fee62c)] |
+
+### **Performance Metrics**
+| **Concept** | **Definition** | **Resources** |
+|-------------|------------------|------------------|
+| **Latency** | The time delay between a request being made and the corresponding response being received | [[Video](https://youtu.be/YSL8wJNLA58?list=PLBgdlMZhIRmExB642Hb7JeW8aBCA-m3PS)] [[Article](https://www.enjoyalgorithms.com/blog/latency-in-system-design)] |
+| **Throughput** | The rate at which a system processes requests or completes tasks, typically measured in units per time | [[Video](https://youtu.be/IhemzDuCwgU)] [[Article](https://www.enjoyalgorithms.com/blog/throughput-in-system-design)] |
+| **Percentile Latency** | p99, p95, p50 latency representing performance at various percentiles of requests | [[Video](https://youtu.be/BrzhaXSEWy8)] [[Article](https://medium.com/@djsmith42/how-to-metric-edafaf959fc7)] |
+| **SLA, SLO & SLI** | Service Level Agreement, Objectives, and Indicators for measuring service quality | [[Video](https://youtu.be/HZwmF47OPMk?list=PLBgdlMZhIRmExB642Hb7JeW8aBCA-m3PS)] [[Article](https://www.blameless.com/blog/sla-vs-slo)] |
+
+### **Data Consistency & Transactions**
+| **Concept** | **Definition** | **Resources** |
+|-------------|------------------|------------------|
+| **Consistency** | The property ensuring all nodes have the same data at the same time across distributed systems | [[Video](https://youtu.be/e_HjDt6AA8s?list=PLBgdlMZhIRmExB642Hb7JeW8aBCA-m3PS)] [[Article](https://medium.com/javarevisited/system-design-1-consistency-in-distributed-systems-a-fundamental-challenge-023616039819)] |
+| **Atomicity** | Operations within a transaction are completed entirely or not at all, maintaining consistency | [[Video](https://youtu.be/w4rGJ9QylNU?list=PLBgdlMZhIRmExB642Hb7JeW8aBCA-m3PS)] [[Article](https://www.freecodecamp.org/news/acid-databases-explained/)] |
+| **Isolation** | Transactions operate independently without interference from other concurrent transactions | [[Video](https://youtu.be/U-4tjScxc_Q?list=PLBgdlMZhIRmExB642Hb7JeW8aBCA-m3PS)] [[Article](https://www.freecodecamp.org/news/acid-databases-explained/)] |
+| **Durability** | Once a transaction is committed, its changes are permanent and survive system failures | [[Video](https://youtu.be/FWuK7uhlYBs?list=PLBgdlMZhIRmExB642Hb7JeW8aBCA-m3PS)] [[Article](https://www.freecodecamp.org/news/acid-databases-explained/)] |
+
+### **Fault Handling & Recovery**
+| **Concept** | **Definition** | **Resources** |
+|-------------|------------------|------------------|
+| **Faults** | Defects or issues in system components that have potential to cause errors | [[Video](https://youtu.be/l1wBr-MZnPQ?list=PLBgdlMZhIRmExB642Hb7JeW8aBCA-m3PS)] [[Article](https://www.baeldung.com/cs/distributed-systems-fault-failure)] |
+| **Failures** | Events where a system fails to perform its intended function, causing service disruption | [[Video](https://youtu.be/l1wBr-MZnPQ?list=PLBgdlMZhIRmExB642Hb7JeW8aBCA-m3PS)] [[Article](https://www.baeldung.com/cs/distributed-systems-fault-failure)] |
+| **Failover** | Automatic switch to backup system when primary system fails, ensuring continuous operation | [[Video](https://youtu.be/02pg0GJky9I?list=PLBgdlMZhIRmExB642Hb7JeW8aBCA-m3PS)] [[Article](https://cloudpatterns.org/mechanisms/failover_system/)] |
+| **Cascading Failure** | Chain reaction of failures in interconnected parts leading to widespread system outage | [[Video](https://youtu.be/oVGOUh6-m4E?list=PLBgdlMZhIRmExB642Hb7JeW8aBCA-m3PS)] [[Article](https://www.infoq.com/articles/anatomy-cascading-failure/)] |
+| **Resiliency** | Ability to recover from failures and continue operating with minimal impact | [[Video](https://youtu.be/kS06YB_K8n0?list=PLBgdlMZhIRmExB642Hb7JeW8aBCA-m3PS)] [[Article](https://insights.sei.cmu.edu/blog/system-resilience-what-exactly-is-it/)] |
+| **Fault Tolerance** | Ability to continue operating correctly even when components fail | [[Video](https://youtu.be/DNam6NbjgW4?list=PLBgdlMZhIRmExB642Hb7JeW8aBCA-m3PS)] [[Article](https://www.cockroachlabs.com/blog/what-is-fault-tolerance/)] |
+
+### **System Integration & Communication**
+| **Concept** | **Definition** | **Resources** |
+|-------------|------------------|------------------|
+| **Upstream/Downstream** | Systems providing data (upstream) vs systems receiving data (downstream) | [[Video](https://youtu.be/XpZpJi4wEsY?list=PLBgdlMZhIRmExB642Hb7JeW8aBCA-m3PS)] [[Article](https://reflectoring.io/upstream-downstream/)] |
+| **Sync vs Async** | Real-time communication (sync) vs non-blocking communication (async) | [[Video](https://youtu.be/aCzZKlRL4q8?list=PLBgdlMZhIRmExB642Hb7JeW8aBCA-m3PS)] [[Article](https://medium.com/inspiredbrilliance/patterns-for-microservices-e57a2d71ff9e)] |
+| **Fault Tolerance vs Resiliency** | Continuous operation despite faults vs recovery and adaptation after disruptions | [[Video](https://youtu.be/rpBPMFk1ah0?list=PLBgdlMZhIRmExB642Hb7JeW8aBCA-m3PS)] [[Article](https://www.ufried.com/blog/resilience_vs_fault_tolerance/)] |
+
+---
+
+## System Design Fundamentals
 
 > **Essential concepts and patterns for building robust, scalable systems**
 
-### 🌐 **Networking & Communication**
+### **Networking & Communication**
 
 1. What is system design? Why is system design so important? [[link1](https://www.karanpratapsingh.com/courses/system-design/what-is-system-design)]
 2. Internet Protocol(IP) [[link1](https://www.karanpratapsingh.com/courses/system-design/ip)] [[link2](https://youtu.be/pMLPG3-ulwY)]
@@ -306,96 +308,89 @@
     2. Use cases for bloom filter usage?
     3. Implementation in Java [[link1](https://richardstartin.github.io/posts/building-a-bloom-filter-from-scratch)] [[link2](https://www.baeldung.com/guava-bloom-filter)]
 55. Lamport Clocks And Vector Clocks [[link1](https://medium.com/@balrajasubbiah/lamport-clocks-and-vector-clocks-b713db1890d7)] [[link2](https://medium.com/big-data-processing/vector-clocks-182007060193)] [[link3](https://flurryhead.medium.com/vector-clock-applications-965677624b94)]
-56. **🌳 Merkle Trees** [[Video1](https://www.youtube.com/watch?v=qHMLy5JjbjQ)] [[Video2](https://www.youtube.com/watch?v=rsx1nt2bxf8)] [[Article1](https://www.codementor.io/blog/merkle-trees-5h9arzd3n8)] [[Article2](https://medium.com/coinmonks/merkle-trees-the-backbone-of-distributed-software-4fa0805132c6)]
+56. **Merkle Trees** [[Video1](https://www.youtube.com/watch?v=qHMLy5JjbjQ)] [[Video2](https://www.youtube.com/watch?v=rsx1nt2bxf8)] [[Article1](https://www.codementor.io/blog/merkle-trees-5h9arzd3n8)] [[Article2](https://medium.com/coinmonks/merkle-trees-the-backbone-of-distributed-software-4fa0805132c6)]
 
 ---
 
-## 📚 Study Guide & Best Practices
+## Study Guide & Best Practices
 
-#### 🧠 **System Design Interview Strategy**
+#### **System Design Interview Strategy**
 
 ```
-1. 📋 Requirements Gathering (5 minutes)
+1. Requirements Gathering (5 minutes)
    ├── Functional requirements
    ├── Non-functional requirements  
    ├── Scale estimation
    └── Constraints and assumptions
 
-2. 🎨 High-Level Design (10 minutes)
+2. High-Level Design (10 minutes)
    ├── Core components identification
    ├── API design
    ├── Database schema
    └── System architecture diagram
 
-3. 🔧 Detailed Design (15 minutes)
+3. Detailed Design (15 minutes)
    ├── Component deep-dive
    ├── Data flow explanation
    ├── Algorithm choices
    └── Technology selections
 
-4. 🎯 Scale & Optimize (10 minutes)
+4. Scale & Optimize (10 minutes)
    ├── Bottleneck identification
    ├── Scaling strategies
    ├── Performance optimizations
    └── Monitoring and metrics
 ```
 
-### 🏆 **Best Practices & Design Principles**
+### **Best Practices & Design Principles**
 
-#### ⚡ **Performance Optimization**
-- **🔍 Identify Bottlenecks Early**: Profile and monitor system performance
-- **📊 Optimize for Actual Usage**: Design based on real traffic patterns
-- **💾 Cache Strategically**: Implement multi-level caching where appropriate
-- **🔄 Async Where Possible**: Use asynchronous processing for non-critical paths
+#### **Performance Optimization**
+- **Identify Bottlenecks Early**: Profile and monitor system performance
+- **Optimize for Actual Usage**: Design based on real traffic patterns
+- **Cache Strategically**: Implement multi-level caching where appropriate
+- **Async Where Possible**: Use asynchronous processing for non-critical paths
 
-#### 🛡️ **Reliability & Resilience**
-- **🎯 Design for Failure**: Assume components will fail and plan accordingly
-- **🔄 Implement Circuit Breakers**: Prevent cascade failures
-- **📈 Gradual Rollouts**: Deploy changes incrementally
-- **🔍 Comprehensive Monitoring**: Monitor all critical system metrics
+#### **Reliability & Resilience**
+- **Design for Failure**: Assume components will fail and plan accordingly
+- **Implement Circuit Breakers**: Prevent cascade failures
+- **Gradual Rollouts**: Deploy changes incrementally
+- **Comprehensive Monitoring**: Monitor all critical system metrics
 
-#### 📈 **Scalability Guidelines**
-- **📊 Horizontal > Vertical**: Prefer scaling out over scaling up
-- **🔄 Stateless Services**: Design services to be stateless when possible
-- **📝 Database Partitioning**: Use sharding for large datasets
-- **⚖️ Load Distribution**: Distribute load evenly across services
+#### **Scalability Guidelines**
+- **Horizontal > Vertical**: Prefer scaling out over scaling up
+- **Stateless Services**: Design services to be stateless when possible
+- **Database Partitioning**: Use sharding for large datasets
+- **Load Distribution**: Distribute load evenly across services
 
-### 🛠️ **Common System Design Patterns**
+### **Common System Design Patterns**
 
-| 🎨 **Pattern** | 🎯 **Use Case** | 📝 **Description** |
+| **Pattern** | **Use Case** | **Description** |
 |------------|--------------|------------------|
-| **🔄 CQRS** | Read/Write Separation | Separate command and query responsibilities |
-| **📅 Event Sourcing** | Audit Trail | Store events rather than current state |
-| **🏗️ Microservices** | Service Decomposition | Break monolith into smaller services |
-| **🌐 API Gateway** | Service Aggregation | Single entry point for client requests |
-| **💾 Database per Service** | Data Isolation | Each service owns its data |
-| **🔄 Saga Pattern** | Distributed Transactions | Manage long-running transactions |
+| **CQRS** | Read/Write Separation | Separate command and query responsibilities |
+| **Event Sourcing** | Audit Trail | Store events rather than current state |
+| **Microservices** | Service Decomposition | Break monolith into smaller services |
+| **API Gateway** | Service Aggregation | Single entry point for client requests |
+| **Database per Service** | Data Isolation | Each service owns its data |
+| **Saga Pattern** | Distributed Transactions | Manage long-running transactions |
 
-### 📊 **Key Metrics to Consider**
+### **Key Metrics to Consider**
 
-#### 🎯 **Performance Metrics**
+#### **Performance Metrics**
 - **Latency**: p95, p99 response times
 - **Throughput**: Requests per second (RPS)
 - **Availability**: Uptime percentage
 - **Error Rate**: Percentage of failed requests
 
-#### 💰 **Business Metrics**
+#### **Business Metrics**
 - **Cost per Transaction**: Infrastructure cost efficiency
 - **Development Velocity**: Time to market for features
 - **Operational Overhead**: Maintenance and support costs
 
-### 🎓 **Interview Success Tips**
+### **Interview Success Tips**
 
-1. **🎯 Ask Clarifying Questions**: Don't assume requirements
-2. **📊 Think Out Loud**: Explain your thought process
-3. **🔄 Iterate and Improve**: Start simple, then add complexity
-4. **📈 Consider Trade-offs**: Discuss pros and cons of decisions
-5. **🛡️ Address Failure Scenarios**: Show you think about edge cases
-6. **💬 Communicate Clearly**: Use diagrams and clear explanations
-
----
-
-<div align="center">
-  <h3>🏗️ Build Systems That Scale! Design with Purpose, Engineer with Precision! 🚀</h3>
-  <p><em>Remember: Great systems are not built by accident – they are designed with intention and evolved with experience. 💪</em></p>
-</div>
+1. **Ask Clarifying Questions**: Don't assume requirements
+2. **Think Out Loud**: Explain your thought process
+3. **Iterate and Improve**: Start simple, then add complexity
+4. **Consider Trade-offs**: Discuss pros and cons of decisions
+5. **Address Failure Scenarios**: Show you think about edge cases
+6. **Communicate Clearly**: Use diagrams and clear explanations
