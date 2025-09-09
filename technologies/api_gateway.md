@@ -1,5 +1,22 @@
 # API Gateway
 
+- [What is an API Gateway?](#what-is-an-api-gateway)
+- [Core Responsibilities](#core-responsibilities)
+- [Tracing a Request](#tracing-a-request)
+   - [1) Request Validation](#1-request-validation)
+   - [2) Middleware](#2-middleware)
+   - [3) Routing](#3-routing)
+   - [4) Backend Communication](#4-backend-communication)
+   - [5) Response Transformation](#5-response-transformation)
+   - [6) Caching](#6-caching)
+- [Scaling an API Gateway](#scaling-an-api-gateway)
+   - [Horizontal Scaling](#horizontal-scaling)
+   - [Global Distribution](#global-distribution)
+- [When to Propose an API Gateway](#when-to-propose-an-api-gateway)
+- [Popular API Gateways](#popular-api-gateways)
+   - [Managed Services](#managed-services)
+   - [Open Source Solutions](#open-source-solutions)
+
 ## What is an API Gateway?
 
 Think of it as the front desk at a luxury hotel. Just as hotel guests don't need to know where the housekeeping office or maintenance room is located, clients shouldn't need to know about the internal structure of your microservices.
@@ -53,7 +70,7 @@ API Gateways can be configured to handle various middleware tasks. For example, 
 
 Of these, the most popular and relevant to system design interviews are authentication, rate limiting, and ip whitelisting/blacklisting.
 
-## 3) Routing
+### 3) Routing
 
 The gateway maintains a routing table that maps incoming requests to backend services. This mapping is typically based on a combination of:
 
