@@ -1,4 +1,4 @@
-# Race Condition Solutions
+# System Dealing With Contention / Race Condition 
 
 - [Context: Race Condition](#context-race-condition)
 - [Database-Level Locking (Pessimistic Concurrency Control)](#database-level-locking-pessimistic-concurrency-control)
@@ -24,7 +24,7 @@
     - [Pros & Cons of Optimistic Concurrency Control](#pros--cons-of-optimistic-concurrency-control)
     - [Comparison: Optimistic vs. Pessimistic Locking](#comparison-optimistic-vs-pessimistic-locking)
     - [When NOT to Use Optimistic Locking?](#when-not-to-use-optimistic-locking)
-- [Compare-and-Swap (CAS) in NoSQL (e.g., DynamoDB, MongoDB)](#compare-and-swap-cas-in-nosql-eg-dynamodb-mongodb)
+- [**Compare-and-Swap (CAS) in NoSQL (e.g., DynamoDB, MongoDB)**](#compare-and-swap-cas-in-nosql-eg-dynamodb-mongodb)
     - [What is Compare-and-Swap (CAS)?](#what-is-compare-and-swap-cas)
     - [How CAS Helps in NoSQL Databases?](#how-cas-helps-in-nosql-databases)
     - [CAS in NoSQL Databases](#cas-in-nosql-databases)
@@ -34,9 +34,9 @@
     - [Pros & Cons of CAS](#pros--cons-of-cas)
     - [When NOT to Use CAS?](#when-not-to-use-cas)
     - [Similarities Between CAS and Optimistic Locking](#similarities-between-cas-and-optimistic-locking)
-- [Pessimistic vs Optimistic Locking (Code Level vs. Database Level)](#pessimistic-vs-optimistic-locking-code-level-vs-database-level)
-    - [When to Use Pessimistic Locking on Code Level vs. Database Level?](#when-to-use-pessimistic-locking-on-code-level-vs-database-level)
-    - [When to Use Optimistic Locking on Code Level vs. Database Level?](#when-to-use-optimistic-locking-on-code-level-vs-database-level)
+- [**P**essimistic **vs Optimistic Locking (Code Level vs. Database Level)**](#pessimistic-vs-optimistic-locking-code-level-vs-database-level)
+    - [**When to Use P**essimistic **Locking on Code Level vs. Database Level?**](#when-to-use-pessimistic-locking-on-code-level-vs-database-level)
+    - [**When to Use Optimistic Locking on Code Level vs. Database Level?**](#when-to-use-optimistic-locking-on-code-level-vs-database-level)
     - [Quick Decision Guide: When to Use Which Locking Mechanism?](#quick-decision-guide-when-to-use-which-locking-mechanism)
 - [Distributed Locks Using Redis](#distributed-locks-using-redis)
     - [What is a Distributed Lock?](#what-is-a-distributed-lock)
@@ -48,8 +48,8 @@
     - [Best Practices for Redis Distributed Locks](#best-practices-for-redis-distributed-locks)
     - [Problems with Basic Redis Locking & Solutions](#problems-with-basic-redis-locking--solutions)
     - [Advanced Distributed Locking: The Redlock Algorithm](#advanced-distributed-locking-the-redlock-algorithm)
-    - [How Redlock Works?](#how-redlock-works)
-    - [Implementing Redlock in Python](#implementing-redlock-in-python)
+    - [**How Redlock Works?**](#how-redlock-works)
+    - [**Implementing Redlock in Python**](#implementing-redlock-in-python)
     - [Pros & Cons of Redis Distributed Locks](#pros--cons-of-redis-distributed-locks)
     - [When NOT to Use Redis Locks?](#when-not-to-use-redis-locks)
 - [Distributed Locks Using ZooKeeper](#distributed-locks-using-zookeeper)
@@ -76,7 +76,7 @@
     - [ZooKeeper for Distributed Locks](#zookeeper-for-distributed-locks)
     - [Etcd for Distributed Locks](#etcd-for-distributed-locks)
     - [Which One Should You Choose?](#which-one-should-you-choose)
-- [Eventual Consistency with CQRS & Event Sourcing](#eventual-consistency-with-cqrs--event-sourcing)
+- [**Eventual Consistency with CQRS & Event Sourcing**](#eventual-consistency-with-cqrs--event-sourcing)
     - [What is Eventual Consistency?](#what-is-eventual-consistency)
     - [What is CQRS (Command Query Responsibility Segregation)?](#what-is-cqrs-command-query-responsibility-segregation)
     - [What is Event Sourcing?](#what-is-event-sourcing)
@@ -87,6 +87,45 @@
     - [When NOT to Use CQRS + Event Sourcing?](#when-not-to-use-cqrs--event-sourcing)
 - [Best Race Condition Prevention Strategies by Use Case](#best-race-condition-prevention-strategies-by-use-case)
     - [Summary](#summary)
+- [Multiple Database Nodes](#multiple-database-nodes)
+    - [Two-Phase Commit (2PC)](#two-phase-commit-2pc)
+    - [Distributed Locks](#distributed-locks)
+    - [Saga Pattern](#saga-pattern)
+        - [What is it?](#what-is-it)
+        - [Why Do We Need Saga Pattern?](#why-do-we-need-saga-pattern)
+        - [How It Helps?](#how-it-helps)
+        - [How Saga Pattern Works?](#how-saga-pattern-works)
+        - [Types of Saga Pattern](#types-of-saga-pattern)
+        - [Implementing Compensating Transactions](#implementing-compensating-transactions)
+        - [Use Cases (When to Use Saga Pattern)?](#use-cases-when-to-use-saga-pattern)
+        - [Choreography vs Orchestration: Which to Choose?](#choreography-vs-orchestration-which-to-choose)
+        - [Best Practices for Saga Pattern](#best-practices-for-saga-pattern)
+        - [Challenges and Limitations](#challenges-and-limitations)
+        - [When NOT to Use Saga Pattern?](#when-not-to-use-saga-pattern)
+        - [Saga Pattern with Event Sourcing](#saga-pattern-with-event-sourcing)
+        - [Tools and Frameworks for Saga Pattern](#tools-and-frameworks-for-saga-pattern)
+        - [Summary](#summary)
+- [Architecture Patterns & Concurrency Control: Complete Comparison](#architecture-patterns--concurrency-control-complete-comparison)
+    - [Architecture Types Overview](#architecture-types-overview)
+        - [1. Single Backend Server + Single Database](#1-single-backend-server--single-database)
+        - [2. Multiple Backend Servers + Single Database](#2-multiple-backend-servers--single-database)
+        - [3. Multiple Backend Servers + Multiple Databases (Sharded/Partitioned)](#3-multiple-backend-servers--multiple-databases-shardedpartitioned)
+        - [4. Multiple Backend Servers + Multiple Databases + Read Replicas](#4-multiple-backend-servers--multiple-databases--read-replicas)
+        - [5. Microservices Architecture (Multiple Services + Multiple Databases)](#5-microservices-architecture-multiple-services--multiple-databases)
+    - [Concurrency Control Mechanisms: When to Use What](#concurrency-control-mechanisms-when-to-use-what)
+        - [Decision Matrix by Architecture](#decision-matrix-by-architecture)
+        - [Detailed Guidance by Architecture](#detailed-guidance-by-architecture)
+    - [Decision Tree: Choosing the Right Approach](#decision-tree-choosing-the-right-approach)
+    - [Real-World Scenario Recommendations](#real-world-scenario-recommendations)
+        - [Scenario 1: Movie Ticket Booking System](#scenario-1-movie-ticket-booking-system)
+        - [Scenario 2: E-commerce Platform](#scenario-2-e-commerce-platform)
+        - [Scenario 3: Banking System](#scenario-3-banking-system)
+        - [Scenario 4: Social Media Feed](#scenario-4-social-media-feed)
+    - [Performance Characteristics](#performance-characteristics)
+        - [Latency Comparison (Approximate)](#latency-comparison-approximate)
+    - [Common Anti-Patterns to Avoid](#common-anti-patterns-to-avoid)
+    - [Summary: Quick Reference Guide](#summary-quick-reference-guide)
+    - [Final Recommendations](#final-recommendations)
 
 # Context: Race Condition
 
@@ -1210,3 +1249,1183 @@ This means **users might briefly see outdated stock levels** until updates propa
 - **Use Optimistic Concurrency (CAS)** when **performance matters** and conflicts are rare (e.g., trading, food delivery).
 - **Use Pessimistic Locking** when **data integrity is critical** (e.g., banking, inventory management).
 - **Use CQRS + Event Sourcing** for **high-scale read-heavy applications** (e.g., hotel bookings).
+
+# Multiple Database Nodes
+
+All the approaches we've covered so far work within a single database. But what happens when you need to coordinate updates across multiple databases? This is where things get significantly more complex.
+
+Consider a bank transfer where Alice and Bob have accounts in different databases. Maybe your bank grew large enough that you had to shard user accounts across multiple databases. Alice's account lives in Database A while Bob's account lives in Database B. Now you can't use a single database transaction to handle the transfer. Database A needs to debit $100 from Alice's account while Database B needs to credit $100 to Bob's account. Both operations must succeed or both must fail. If Database A debits Alice but Database B fails to credit Bob, money disappears from the system.
+You have several options for distributed coordination, each with different trade-offs:
+
+## Two-Phase Commit (2PC)
+
+The classic solution is two-phase commit, where your transfer service acts as the coordinator managing the transaction across multiple database participants. The coordinator (your service) asks all participants to prepare the transaction in the first phase, then tells them to commit or abort in the second phase based on whether everyone has successfully prepared.
+
+Critically, the coordinator must write to a persistent log before sending any commit or abort decisions. This log records which participants are involved and the current state of the transaction. Without this log, coordinator crashes create unrecoverable situations where participants don't know whether to commit or abort their prepared transactions.
+
+Note: Keeping transactions open across network calls is extremely dangerous. Those open transactions hold locks on Alice's and Bob's account rows, blocking any other operations on those accounts. If your coordinator service crashes, those transactions stay open indefinitely, potentially locking the accounts forever. Production systems add timeouts to automatically rollback prepared transactions after 30-60 seconds, but this creates other problems like legitimate slow operations might get rolled back, causing the transfer to fail even when it should have succeeded.
+
+The prepare phase is where each database does all the work except the final commit. Database A starts a transaction, verifies Alice has sufficient funds, places a hold on $100, but doesn't commit yet. The changes are made but not permanent, and other transactions can't see them. Database B starts a transaction, verifies Bob's account exists, prepares to add $100, but doesn't commit yet. In SQL terms, this looks like:
+
+```sql
+-- Database A during prepare phase
+BEGIN TRANSACTION;
+SELECT balance FROM accounts WHERE user_id = 'alice' FOR UPDATE;
+-- Check if balance >= 100
+UPDATE accounts SET balance = balance - 100 WHERE user_id = 'alice';
+-- Transaction stays open, waiting for coordinator's decision
+
+-- Database B during prepare phase  
+BEGIN TRANSACTION;
+SELECT * FROM accounts WHERE user_id = 'bob' FOR UPDATE;
+-- Verify account exists and is active
+UPDATE accounts SET balance = balance + 100 WHERE user_id = 'bob';
+-- Transaction stays open, waiting for coordinator's decision
+```
+
+If both databases can prepare successfully, your service tells them to commit their open transactions. If either fails, both roll back their open transactions.
+
+Two-phase commit guarantees atomicity across multiple systems, but it's expensive and fragile. If your service crashes between prepare and commit, both databases are left with open transactions in an uncertain state. If any database is slow or unavailable, the entire transfer blocks. Network partitions can leave the system in an inconsistent state.
+
+## Distributed Locks
+
+For simpler coordination needs, you can use distributed locks. Instead of coordinating complex transactions, you just ensure only one process can work on a particular resource at a time across your entire system.
+
+For our bank transfer, you could acquire locks on both Alice's and Bob's account IDs before starting any operations. This prevents concurrent transfers from interfering with each other:
+
+Distributed locks can be implemented with several technologies, each with different characteristics:
+
+**Redis with TTL** - Redis provides atomic operations with automatic expiration, making it ideal for distributed locks. The SET command with expiration atomically creates a lock that Redis will automatically remove after the TTL expires. This eliminates the need for cleanup jobs since Redis handles expiration in the background. The lock is distributed because all your application servers can access the same Redis instance and see consistent state. When the lock expires or is explicitly deleted, the resource becomes available again. The advantage is speed and simplicity. Redis operations are very fast and the TTL handles cleanup automatically. The disadvantage is that Redis becomes a single point of failure, and you need to handle scenarios where Redis is unavailable.
+
+**Database columns** - You can implement distributed locks using your existing database by adding status and expiration columns to track which resources are locked. This approach keeps everything in one place and leverages your database's ACID properties to ensure atomicity when acquiring locks. A background job periodically cleans up expired locks, though you need to handle race conditions between the cleanup job and users trying to extend their locks. The advantage is consistency with your existing data and no additional infrastructure. The disadvantage is that database operations are slower than cache operations, and you need to implement and maintain cleanup logic.
+
+**ZooKeeper/etcd** - These are purpose-built coordination services designed specifically for distributed systems. They provide strong consistency guarantees even during network partitions and leader failures. ZooKeeper uses ephemeral nodes that automatically disappear when the client session ends, providing natural cleanup for crashed processes. Both systems use consensus algorithms (Raft for etcd, ZAB for ZooKeeper) to maintain consistency across multiple nodes.
+
+The advantage is robustness. These systems are designed to handle the complex failure scenarios that Redis and database approaches struggle with. The disadvantage is operational complexity, as you need to run and maintain a separate coordination cluster.
+
+Distributed locks aren't just for technical coordination either, they can dramatically improve user experience by preventing contention before it happens. Instead of letting users compete for the same resource, create intermediate states that give temporary exclusive access.
+
+Consider Ticketmaster seat reservations. When you select a seat, it doesn't immediately go from "available" to "sold." Instead, it goes to a "reserved" state that gives you time to complete payment while preventing others from selecting the same seat. The contention window shrinks from the entire purchase process (5 minutes) to just the reservation step (milliseconds).
+
+The same pattern appears everywhere. Uber sets driver status to "pending_request," e-commerce sites put items "on hold" in shopping carts, and meeting room booking systems create temporary holds.
+
+The advantage is simplicity compared to complex transaction coordination. The disadvantage is that distributed locks can become bottlenecks under high contention, and you need to handle lock timeouts and failure scenarios.
+
+## Saga Pattern
+
+### What is it?
+
+The **Saga Pattern** is a design pattern for managing **distributed transactions** across multiple microservices without using traditional two-phase commit (2PC). Instead of locking resources across services, a saga breaks down a transaction into a **sequence of local transactions**, where each service updates its own database and publishes an event or message to trigger the next step.
+
+If any step fails, the saga executes **compensating transactions** to undo the changes made by previous steps, ensuring eventual consistency.
+
+### Why Do We Need Saga Pattern?
+
+In distributed systems and microservices architectures:
+
+1. **No Distributed ACID Transactions** → Each microservice has its own database, making traditional ACID transactions across services impractical.
+2. **Avoid Distributed Locks** → Two-phase commit (2PC) blocks resources and doesn't scale well.
+3. **Maintain Data Consistency** → Need to ensure all services either complete successfully or rollback changes.
+4. **Handle Failures Gracefully** → Services can fail independently, requiring a recovery mechanism.
+
+### How It Helps?
+
+The Saga Pattern provides:
+
+1. **Eventual Consistency** → All services eventually reach a consistent state.
+2. **Better Scalability** → No distributed locks or blocking operations.
+3. **Fault Tolerance** → Automatic compensation (rollback) on failures.
+4. **Service Independence** → Each service manages its own transactions.
+
+### How Saga Pattern Works?
+
+A saga consists of:
+
+1. **Local Transactions** → Each service performs its own database transaction.
+2. **Events/Messages** → Services communicate progress through events or messages.
+3. **Compensating Transactions** → Reverse operations that undo changes if a step fails.
+
+**Example Flow: E-commerce Order Processing**
+
+```
+Success Flow:
+1. Order Service: Create Order (Status: PENDING)
+2. Payment Service: Process Payment
+3. Inventory Service: Reserve Items
+4. Shipping Service: Schedule Delivery
+5. Order Service: Update Order (Status: CONFIRMED)
+
+Failure Flow (if Inventory fails):
+1. Order Service: Create Order ✅
+2. Payment Service: Process Payment ✅
+3. Inventory Service: Reserve Items ❌ FAILED
+4. Payment Service: Refund Payment (Compensating Transaction)
+5. Order Service: Cancel Order (Compensating Transaction)
+```
+
+### Types of Saga Pattern
+
+There are two main implementation approaches:
+
+#### 1. Choreography-Based Saga
+
+Services **communicate through events** without a central coordinator. Each service listens to events and knows what to do next.
+
+**How It Works:**
+
+- Each service publishes events after completing its transaction
+- Other services subscribe to these events and react accordingly
+- No central control; services are loosely coupled
+
+**Example: Order Processing with Choreography**
+
+```
+1. Order Service creates order → publishes "OrderCreated" event
+2. Payment Service listens to "OrderCreated" → processes payment → publishes "PaymentCompleted" event
+3. Inventory Service listens to "PaymentCompleted" → reserves items → publishes "ItemsReserved" event
+4. Shipping Service listens to "ItemsReserved" → schedules delivery → publishes "ShippingScheduled" event
+
+If Inventory fails:
+3. Inventory Service publishes "InventoryFailed" event
+4. Payment Service listens to "InventoryFailed" → refunds payment → publishes "PaymentRefunded" event
+5. Order Service listens to "PaymentRefunded" → cancels order
+```
+
+**Visual Diagram:**
+
+```
+┌─────────────────┐
+│  Order Service  │
+└────────┬────────┘
+         │ publishes: OrderCreated
+         ▼
+    ┌─────────┐
+    │  Event  │
+    │   Bus   │
+    └────┬────┘
+         │
+    ┌────┴─────────────────┬────────────────────┐
+    ▼                      ▼                    ▼
+┌──────────────┐   ┌──────────────┐   ┌────────────────┐
+│   Payment    │   │  Inventory   │   │    Shipping    │
+│   Service    │   │   Service    │   │    Service     │
+└──────┬───────┘   └──────┬───────┘   └────────┬───────┘
+       │                  │                     │
+       │ PaymentCompleted │ ItemsReserved       │ ShippingScheduled
+       └──────────────────┴─────────────────────┘
+                          │
+                          ▼
+                    ┌─────────┐
+                    │  Event  │
+                    │   Bus   │
+                    └─────────┘
+```
+
+**Pros:**
+- Simple to implement for small workflows
+- Services are loosely coupled
+- No single point of failure
+
+**Cons:**
+- Hard to track overall saga state
+- Complex to debug and monitor
+- Circular dependencies can occur
+- Difficult to understand the workflow
+
+#### 2. Orchestration-Based Saga
+
+A **central orchestrator** (saga coordinator) tells each service what to do and when. The orchestrator manages the entire workflow.
+
+**How It Works:**
+
+- Orchestrator sends commands to services
+- Services execute and respond back to orchestrator
+- Orchestrator decides next steps based on responses
+- Orchestrator triggers compensating transactions on failures
+
+**Example: Order Processing with Orchestration**
+
+```
+1. Order Orchestrator → Order Service: Create Order
+2. Order Orchestrator → Payment Service: Process Payment
+3. Order Orchestrator → Inventory Service: Reserve Items
+4. Order Orchestrator → Shipping Service: Schedule Delivery
+5. Order Orchestrator → Order Service: Confirm Order
+
+If Inventory fails:
+3. Inventory Service → Order Orchestrator: Reservation Failed
+4. Order Orchestrator → Payment Service: Refund Payment
+5. Order Orchestrator → Order Service: Cancel Order
+```
+
+**Visual Diagram:**
+
+```
+                    ┌──────────────────────┐
+                    │  Order Orchestrator  │
+                    │  (Saga Coordinator)  │
+                    └──────────┬───────────┘
+                               │
+        ┌──────────────────────┼──────────────────────┐
+        │                      │                      │
+        ▼                      ▼                      ▼
+┌──────────────┐      ┌──────────────┐      ┌────────────────┐
+│   Payment    │      │  Inventory   │      │    Shipping    │
+│   Service    │      │   Service    │      │    Service     │
+└──────┬───────┘      └──────┬───────┘      └────────┬───────┘
+       │                     │                       │
+       │ Response            │ Response              │ Response
+       └─────────────────────┴───────────────────────┘
+                             │
+                             ▼
+                    ┌──────────────────────┐
+                    │  Order Orchestrator  │
+                    └──────────────────────┘
+```
+
+**Pros:**
+- Clear workflow visibility
+- Easier to monitor and debug
+- Centralized logic for saga management
+- Better control over the process
+
+**Cons:**
+- Orchestrator can become a single point of failure
+- Orchestrator can become complex
+- Services are coupled to orchestrator
+
+### Implementing Compensating Transactions
+
+**Key Principles:**
+
+1. **Idempotency** → Compensating transactions must be idempotent (can be retried safely)
+2. **Order Matters** → Compensations execute in reverse order of the saga steps
+3. **Not Always Rollback** → Sometimes compensation is notification (e.g., send apology email)
+
+**Example: Payment Compensation**
+
+```python
+# Forward Transaction
+def process_payment(order_id, amount):
+    payment_id = charge_credit_card(amount)
+    save_payment_record(order_id, payment_id, "COMPLETED")
+    return payment_id
+
+# Compensating Transaction
+def refund_payment(order_id):
+    payment = get_payment_record(order_id)
+    if payment.status == "COMPLETED":
+        refund_credit_card(payment.payment_id)
+        update_payment_record(payment.payment_id, "REFUNDED")
+```
+
+### Use Cases (When to Use Saga Pattern)?
+
+Use Saga Pattern when:
+
+1. **Microservices Architecture** → Multiple services with separate databases
+2. **Long-Running Transactions** → Operations that span multiple services and take time
+3. **No 2PC Available** → When you can't use distributed transactions
+4. **Business Processes** → Order processing, booking systems, payment workflows
+5. **Need Eventual Consistency** → Immediate consistency not required
+
+**Common Use Cases:**
+
+- **E-commerce Order Processing** → Order → Payment → Inventory → Shipping
+- **Hotel Booking System** → Reserve room → Process payment → Send confirmation
+- **Flight Booking** → Reserve seat → Payment → Ticket generation → Email confirmation
+- **Money Transfer** → Debit account A → Credit account B
+
+### Choreography vs Orchestration: Which to Choose?
+
+| Aspect | Choreography | Orchestration |
+| --- | --- | --- |
+| **Control** | Decentralized (no coordinator) | Centralized (orchestrator manages) |
+| **Coupling** | Loose coupling between services | Services coupled to orchestrator |
+| **Complexity** | Simple for few services, complex for many | Complex orchestrator, simple services |
+| **Visibility** | Hard to track overall workflow | Easy to track and monitor |
+| **Debugging** | Difficult to trace | Easier to debug |
+| **Single Point of Failure** | No | Yes (orchestrator) |
+| **Best For** | Simple workflows, few services | Complex workflows, many services |
+
+**Rule of Thumb:**
+- Use **Choreography** for 2-3 services with simple workflows
+- Use **Orchestration** for 4+ services or complex business logic
+
+### Best Practices for Saga Pattern
+
+1. **Design Idempotent Operations** → All transactions and compensations should be idempotent
+2. **Use Unique Transaction IDs** → Track saga execution with correlation IDs
+3. **Implement Timeout Handling** → Set timeouts for each step to prevent hanging
+4. **Log Everything** → Comprehensive logging for debugging
+5. **Use Message Queues** → Ensure reliable message delivery (Kafka, RabbitMQ)
+6. **Handle Partial Failures** → Design for scenarios where compensation might fail
+7. **Monitor Saga State** → Track progress and failures in real-time
+8. **Test Compensation Logic** → Regularly test rollback scenarios
+
+### Challenges and Limitations
+
+1. **Lack of Isolation** → Other transactions can see intermediate states
+2. **Complexity** → Harder to implement than simple transactions
+3. **Debugging Difficulty** → Distributed nature makes troubleshooting complex
+4. **Eventual Consistency** → Not suitable for operations requiring immediate consistency
+5. **Compensation Logic** → Not all operations can be easily reversed (e.g., sending emails)
+
+### When NOT to Use Saga Pattern?
+
+1. **Single Database** → Use traditional ACID transactions
+2. **Strong Consistency Required** → When eventual consistency is not acceptable
+3. **Simple Operations** → Overhead not worth it for simple workflows
+4. **Real-Time Systems** → When you need immediate consistency
+
+### Saga Pattern with Event Sourcing
+
+Combining Saga with Event Sourcing provides even better traceability:
+
+```python
+# Event-Sourced Saga
+class OrderSagaEvents:
+    ORDER_CREATED = "OrderCreated"
+    PAYMENT_PROCESSED = "PaymentProcessed"
+    PAYMENT_FAILED = "PaymentFailed"
+    INVENTORY_RESERVED = "InventoryReserved"
+    INVENTORY_FAILED = "InventoryFailed"
+    SHIPPING_SCHEDULED = "ShippingScheduled"
+    ORDER_CONFIRMED = "OrderConfirmed"
+    ORDER_CANCELLED = "OrderCancelled"
+
+# Store all events for audit trail
+event_store.append({
+    'saga_id': saga_id,
+    'event_type': OrderSagaEvents.ORDER_CREATED,
+    'timestamp': datetime.now(),
+    'data': order_data
+})
+```
+
+### Tools and Frameworks for Saga Pattern
+
+1. **Temporal** → Workflow orchestration engine
+2. **Apache Camel** → Integration framework with saga support
+3. **Axon Framework** → Java framework for CQRS and Saga
+4. **Eventuate Tram** → Microservices framework with saga orchestration
+5. **Netflix Conductor** → Workflow orchestration engine
+6. **Camunda** → BPM platform for orchestration
+
+### Summary
+
+The Saga Pattern is essential for managing distributed transactions in microservices architectures. It trades immediate consistency for scalability and fault tolerance, using compensating transactions to maintain eventual consistency. Choose **choreography** for simple workflows and **orchestration** for complex business processes with multiple services.
+
+# Architecture Patterns & Concurrency Control: Complete Comparison
+
+This section provides a comprehensive comparison of different system architectures and which concurrency control mechanisms work best for each scenario.
+
+## Architecture Types Overview
+
+### 1. Single Backend Server + Single Database
+
+**Characteristics:**
+- All requests handled by one application instance
+- Single database instance
+- All code runs in the same JVM/process
+- Simplest architecture, no distributed coordination needed
+
+**Concurrency Challenges:**
+- Multiple threads competing for same resources within one server
+- Race conditions between threads
+- Database-level conflicts from concurrent transactions
+
+**Best For:**
+- Small applications
+- Internal tools
+- Prototypes and MVPs
+- Low-traffic systems (< 1000 concurrent users)
+
+### 2. Multiple Backend Servers + Single Database
+
+**Characteristics:**
+- Load balancer distributes requests across multiple application servers
+- All servers share a single database
+- Database becomes the coordination point
+- Most common architecture for medium-scale applications
+
+**Concurrency Challenges:**
+- Race conditions across different server instances
+- Database is the single source of truth but also a bottleneck
+- Code-level locks (synchronized, ReentrantLock) don't work across servers
+- All coordination must happen at database or external distributed lock level
+
+**Best For:**
+- Medium-scale web applications
+- Applications with read-heavy workloads
+- Systems requiring strong consistency
+- Traffic: 1K - 100K concurrent users
+
+### 3. Multiple Backend Servers + Multiple Databases (Sharded/Partitioned)
+
+**Characteristics:**
+- Multiple application servers
+- Multiple database instances (sharded by user ID, region, etc.)
+- Data distributed across databases
+- More complex coordination needed
+
+**Concurrency Challenges:**
+- Transactions that span multiple databases
+- No single database can coordinate across shards
+- Network partitions can cause inconsistencies
+- Distributed transaction complexity
+
+**Best For:**
+- Large-scale applications
+- Global applications (geo-distributed)
+- High-throughput systems
+- Traffic: 100K+ concurrent users
+
+### 4. Multiple Backend Servers + Multiple Databases + Read Replicas
+
+**Characteristics:**
+- Multiple application servers
+- Primary databases for writes
+- Read replicas for read operations
+- Replication lag introduces eventual consistency
+
+**Concurrency Challenges:**
+- Read-after-write consistency issues
+- Replication lag
+- Failover scenarios
+- Stale reads from replicas
+
+**Best For:**
+- Read-heavy applications (90%+ reads)
+- Analytics dashboards
+- Content platforms (blogs, news sites)
+- Social media feeds
+
+### 5. Microservices Architecture (Multiple Services + Multiple Databases)
+
+**Characteristics:**
+- Independent services with separate databases (database per service pattern)
+- Services communicate via APIs/events
+- No shared database access between services
+- Eventual consistency is the norm
+
+**Concurrency Challenges:**
+- Cross-service transactions
+- Maintaining consistency across service boundaries
+- No ACID guarantees across services
+- Complex failure scenarios
+
+**Best For:**
+- Large organizations with multiple teams
+- Complex business domains
+- Systems requiring independent scaling
+- High availability requirements
+
+## Concurrency Control Mechanisms: When to Use What
+
+### Decision Matrix by Architecture
+
+| Architecture | Pessimistic Locking | Optimistic Locking | Two-Phase Commit | Distributed Locks | Saga Pattern | CQRS + Event Sourcing |
+|---|---|---|---|---|---|---|
+| **Single Backend + Single DB** | ✅ Perfect | ✅ Perfect | ❌ Not needed | ❌ Overkill | ❌ Overkill | ❌ Overkill |
+| **Multiple Backend + Single DB** | ✅ Excellent | ✅ Excellent | ❌ Not needed | ⚠️ Optional | ❌ Not needed | ⚠️ Optional |
+| **Multiple Backend + Multiple DB** | ⚠️ Per DB only | ⚠️ Per DB only | ✅ Suitable | ✅ Required | ✅ Preferred | ✅ Excellent |
+| **Multiple Backend + Replicas** | ⚠️ Primary only | ✅ Good | ⚠️ Complex | ✅ Required | ⚠️ Optional | ✅ Excellent |
+| **Microservices** | ❌ Insufficient | ❌ Insufficient | ⚠️ Avoid | ✅ Required | ✅ Perfect | ✅ Perfect |
+
+### Detailed Guidance by Architecture
+
+#### Single Backend Server + Single Database
+
+**Available Options:**
+1. **Pessimistic Locking (Code-Level)**
+   - Use `synchronized` blocks or `ReentrantLock`
+   - Works perfectly since all threads in same JVM
+   - Simple and effective
+   - Example: Blocking a seat during booking
+
+2. **Pessimistic Locking (Database-Level)**
+   - Use `SELECT ... FOR UPDATE`
+   - Ensures database-level consistency
+   - Better for transactions spanning multiple queries
+   - Example: Bank account transfers
+
+3. **Optimistic Locking (Code-Level)**
+   - Use `AtomicReference` or `compareAndSet()`
+   - Good for low-contention scenarios
+   - Fast and non-blocking
+   - Example: Updating user preferences
+
+4. **Optimistic Locking (Database-Level)**
+   - Use version columns with `@Version`
+   - Allows concurrent reads
+   - Retry on conflict
+   - Example: E-commerce product updates
+
+**When to Use What:**
+- **High contention (many users competing for same resource)** → Pessimistic Locking
+- **Low contention (conflicts are rare)** → Optimistic Locking
+- **Critical operations (banking, payments)** → Database-level Pessimistic Locking
+- **Fast operations (counters, simple updates)** → Code-level Optimistic Locking
+
+**Example Scenario: Movie Seat Booking**
+```java
+// Pessimistic approach (database-level)
+@Transactional
+public void bookSeat(String seatId, String userId) {
+    Seat seat = seatRepository.findByIdWithLock(seatId); // SELECT ... FOR UPDATE
+    if (seat.isAvailable()) {
+        seat.setStatus("BOOKED");
+        seat.setUserId(userId);
+        seatRepository.save(seat);
+    }
+}
+
+// Optimistic approach (database-level)
+@Entity
+class Seat {
+    @Version
+    private int version;
+    // ... other fields
+}
+
+@Transactional
+public void bookSeat(String seatId, String userId) {
+    Seat seat = seatRepository.findById(seatId);
+    if (seat.isAvailable()) {
+        seat.setStatus("BOOKED");
+        seat.setUserId(userId);
+        seatRepository.save(seat); // Throws OptimisticLockException if version changed
+    }
+}
+```
+
+#### Multiple Backend Servers + Single Database
+
+**Key Constraint:** Code-level locks don't work across different servers. Must coordinate through database or external system.
+
+**Available Options:**
+
+1. **Database-Level Pessimistic Locking**
+   - ✅ **Best Choice for Strong Consistency**
+   - Works across all servers since database is shared
+   - Prevents conflicts at the source
+   - Example: `SELECT ... FOR UPDATE`
+
+2. **Database-Level Optimistic Locking**
+   - ✅ **Best Choice for High Concurrency**
+   - Version-based conflict detection
+   - Better performance than pessimistic
+   - Works across all servers
+   - Example: JPA `@Version` annotation
+
+3. **Distributed Locks (Optional Enhancement)**
+   - Redis/etcd for cross-server coordination
+   - Useful for application-level locking before hitting database
+   - Reduces database contention
+   - Example: Lock user session during checkout
+
+**When to Use What:**
+- **Financial transactions, inventory updates** → Database Pessimistic Locking
+- **User profile updates, content editing** → Database Optimistic Locking
+- **Multi-step workflows (reserve → process → confirm)** → Distributed Locks + Database Locking
+- **Reducing database load** → Distributed Locks (Redis) before database operations
+
+**Example Scenario: E-commerce Inventory Management**
+```java
+// Database-level pessimistic locking (recommended)
+@Transactional
+public boolean purchaseProduct(Long productId, int quantity) {
+    Product product = productRepository.findByIdWithLock(productId); // SELECT ... FOR UPDATE
+    if (product.getStock() >= quantity) {
+        product.setStock(product.getStock() - quantity);
+        productRepository.save(product);
+        return true;
+    }
+    return false;
+}
+
+// With distributed lock for additional coordination
+public boolean purchaseProductWithRedisLock(Long productId, int quantity) {
+    String lockKey = "product_lock_" + productId;
+    
+    if (redisLock.tryLock(lockKey, 10)) { // Try to acquire Redis lock
+        try {
+            // Now perform database operation with pessimistic lock
+            return purchaseProduct(productId, quantity);
+        } finally {
+            redisLock.unlock(lockKey);
+        }
+    }
+    return false; // Couldn't acquire lock
+}
+```
+
+#### Multiple Backend Servers + Multiple Databases (Sharded)
+
+**Key Constraint:** No single database can coordinate. Operations may span multiple database instances.
+
+**Available Options:**
+
+1. **Two-Phase Commit (2PC)**
+   - For cross-database ACID transactions
+   - Expensive and blocking
+   - Coordinator failure can lock resources
+   - Use only when absolutely necessary
+   - Example: Money transfer across sharded accounts
+
+2. **Distributed Locks (Essential)**
+   - ✅ **Required for Resource Coordination**
+   - Redis Redlock, ZooKeeper, or etcd
+   - Coordinate access across shards
+   - Example: Ensure only one server processes a job
+
+3. **Saga Pattern**
+   - ✅ **Preferred over 2PC**
+   - Eventual consistency with compensation
+   - Better fault tolerance
+   - More scalable
+   - Example: Order processing across services
+
+4. **CQRS + Event Sourcing**
+   - ✅ **Best for Complex Domains**
+   - Separate read/write models
+   - Event-driven consistency
+   - Excellent auditability
+   - Example: Banking transaction history
+
+**When to Use What:**
+- **Cross-shard ACID required (rare)** → Two-Phase Commit
+- **Resource coordination** → Distributed Locks (ZooKeeper/etcd)
+- **Business workflows** → Saga Pattern (Orchestration)
+- **Event-driven systems** → Saga Pattern (Choreography) + Event Sourcing
+- **Complex read/write patterns** → CQRS + Event Sourcing
+- **High-scale applications** → Avoid 2PC, use Saga + Distributed Locks
+
+**Example Scenario: Bank Transfer Across Shards**
+
+```java
+// Option 1: Two-Phase Commit (expensive, avoid if possible)
+@Transactional
+public void transferMoney2PC(String fromAccount, String toAccount, BigDecimal amount) {
+    // Coordinator manages 2PC across Database A and Database B
+    TransactionCoordinator coordinator = new TransactionCoordinator();
+    
+    // Phase 1: Prepare on both databases
+    boolean db1Ready = coordinator.prepare(databaseA, () -> {
+        debitAccount(fromAccount, amount);
+    });
+    
+    boolean db2Ready = coordinator.prepare(databaseB, () -> {
+        creditAccount(toAccount, amount);
+    });
+    
+    // Phase 2: Commit or Abort
+    if (db1Ready && db2Ready) {
+        coordinator.commit(); // Commit both
+    } else {
+        coordinator.abort(); // Rollback both
+    }
+}
+
+// Option 2: Saga Pattern (preferred)
+public void transferMoneySaga(String fromAccount, String toAccount, BigDecimal amount) {
+    String sagaId = UUID.randomUUID().toString();
+    
+    try {
+        // Step 1: Debit from account
+        debitAccount(fromAccount, amount);
+        publishEvent(new MoneyDebitedEvent(sagaId, fromAccount, amount));
+        
+        // Step 2: Credit to account
+        creditAccount(toAccount, amount);
+        publishEvent(new MoneyCreditedEvent(sagaId, toAccount, amount));
+        
+        // Step 3: Confirm transaction
+        publishEvent(new TransferCompletedEvent(sagaId));
+        
+    } catch (Exception e) {
+        // Compensation: Rollback debit
+        compensateDebit(fromAccount, amount);
+        publishEvent(new TransferFailedEvent(sagaId, e.getMessage()));
+    }
+}
+
+// Option 3: With Distributed Lock
+public void transferMoneyWithLock(String fromAccount, String toAccount, BigDecimal amount) {
+    // Acquire locks on both accounts (alphabetically to avoid deadlock)
+    List<String> accounts = Arrays.asList(fromAccount, toAccount);
+    Collections.sort(accounts);
+    
+    try (DistributedLock lock1 = lockService.acquireLock(accounts.get(0));
+         DistributedLock lock2 = lockService.acquireLock(accounts.get(1))) {
+        
+        // Perform transfer within locked section
+        transferMoneySaga(fromAccount, toAccount, amount);
+    }
+}
+```
+
+#### Microservices Architecture
+
+**Key Constraint:** Services have independent databases. No shared state. Cross-service consistency is complex.
+
+**Available Options:**
+
+1. **Distributed Locks (Required)**
+   - ✅ **Essential for Service Coordination**
+   - Prevent duplicate processing
+   - Leader election
+   - Use ZooKeeper or etcd (not Redis for critical operations)
+
+2. **Saga Pattern**
+   - ✅ **Primary Pattern for Cross-Service Transactions**
+   - Orchestration for complex workflows
+   - Choreography for simple event chains
+   - Compensating transactions for rollback
+
+3. **CQRS + Event Sourcing**
+   - ✅ **Ideal for Microservices**
+   - Services publish events
+   - Read models built from events
+   - Eventual consistency across services
+   - Perfect audit trail
+
+4. **Two-Phase Commit**
+   - ⚠️ **Generally Avoided**
+   - Violates microservice independence
+   - Creates tight coupling
+   - Reduces availability
+   - Use only for critical operations (rare)
+
+**When to Use What:**
+- **Order processing, booking workflows** → Saga Pattern (Orchestration)
+- **Event-driven updates** → Saga Pattern (Choreography) + Event Sourcing
+- **Complex business domains** → CQRS + Event Sourcing
+- **Preventing duplicate processing** → Distributed Locks (ZooKeeper)
+- **Leader election** → Distributed Locks (ZooKeeper/etcd)
+- **Cross-service strong consistency (rare)** → Two-Phase Commit (last resort)
+
+**Example Scenario: E-commerce Order Processing**
+
+```java
+// Saga Pattern with Orchestration (recommended)
+@Service
+public class OrderSagaOrchestrator {
+    
+    public void processOrder(OrderRequest request) {
+        String sagaId = UUID.randomUUID().toString();
+        
+        try {
+            // Step 1: Create Order
+            String orderId = orderService.createOrder(request);
+            sagaStateStore.save(sagaId, "ORDER_CREATED", orderId);
+            
+            // Step 2: Process Payment
+            PaymentResult payment = paymentService.processPayment(orderId, request.getAmount());
+            sagaStateStore.save(sagaId, "PAYMENT_COMPLETED", payment.getPaymentId());
+            
+            // Step 3: Reserve Inventory
+            inventoryService.reserveItems(orderId, request.getItems());
+            sagaStateStore.save(sagaId, "INVENTORY_RESERVED", orderId);
+            
+            // Step 4: Schedule Shipping
+            shippingService.scheduleDelivery(orderId);
+            sagaStateStore.save(sagaId, "SHIPPING_SCHEDULED", orderId);
+            
+            // Complete
+            orderService.confirmOrder(orderId);
+            sagaStateStore.save(sagaId, "COMPLETED", orderId);
+            
+        } catch (PaymentFailedException e) {
+            // Compensation: Cancel order
+            orderService.cancelOrder(orderId);
+            sagaStateStore.save(sagaId, "COMPENSATED", "Payment failed");
+            
+        } catch (InventoryNotAvailableException e) {
+            // Compensation: Refund payment and cancel order
+            paymentService.refundPayment(payment.getPaymentId());
+            orderService.cancelOrder(orderId);
+            sagaStateStore.save(sagaId, "COMPENSATED", "Inventory unavailable");
+        }
+    }
+}
+
+// CQRS + Event Sourcing (for complex scenarios)
+@Service
+public class OrderEventSourcingService {
+    
+    public void processOrderWithEvents(OrderRequest request) {
+        String orderId = UUID.randomUUID().toString();
+        
+        // Publish command event
+        eventStore.append(new OrderCreatedEvent(orderId, request));
+        
+        // Other services listen to events and react
+        // Payment Service listens to OrderCreatedEvent
+        // Inventory Service listens to PaymentCompletedEvent
+        // Shipping Service listens to InventoryReservedEvent
+    }
+}
+
+// Event Handlers in different services
+@EventHandler
+public void onOrderCreated(OrderCreatedEvent event) {
+    // Payment Service processes payment
+    PaymentResult result = processPayment(event.getOrderId(), event.getAmount());
+    eventStore.append(new PaymentCompletedEvent(event.getOrderId(), result.getPaymentId()));
+}
+
+@EventHandler
+public void onPaymentCompleted(PaymentCompletedEvent event) {
+    // Inventory Service reserves items
+    reserveInventory(event.getOrderId());
+    eventStore.append(new InventoryReservedEvent(event.getOrderId()));
+}
+```
+
+## Decision Tree: Choosing the Right Approach
+
+```
+START: What's your architecture?
+│
+├─ Single Backend + Single DB
+│  │
+│  └─ High contention (many users competing)?
+│     ├─ YES → Pessimistic Locking (Database-level)
+│     └─ NO → Optimistic Locking (Code or Database-level)
+│
+├─ Multiple Backends + Single DB
+│  │
+│  └─ What's more important?
+│     ├─ Strong consistency → Pessimistic Locking (Database-level)
+│     ├─ High throughput → Optimistic Locking (Database-level)
+│     └─ Multi-step workflow → Distributed Locks + Database Locking
+│
+├─ Multiple Backends + Multiple DBs (Sharded)
+│  │
+│  └─ Transaction spans databases?
+│     ├─ YES, ACID required → Two-Phase Commit (use cautiously)
+│     ├─ YES, eventual consistency OK → Saga Pattern
+│     └─ NO, same-DB operations → Pessimistic/Optimistic + Distributed Locks
+│
+└─ Microservices
+   │
+   └─ What are you coordinating?
+      ├─ Cross-service transaction → Saga Pattern (Orchestration)
+      ├─ Event-driven workflow → Saga Pattern (Choreography) + Event Sourcing
+      ├─ Resource access → Distributed Locks (ZooKeeper/etcd)
+      ├─ Complex domain → CQRS + Event Sourcing
+      └─ Simple operations → Each service manages own transactions
+```
+
+## Real-World Scenario Recommendations
+
+### Scenario 1: Movie Ticket Booking System
+
+**Architecture:** Multiple Backend + Single DB (initially) → Multiple Backend + Multiple DBs (at scale)
+
+**Phase 1 (Small Scale - Single DB):**
+- Use **Database-Level Pessimistic Locking** for seat reservation
+- Simple `SELECT ... FOR UPDATE` on seat rows
+- Locks held only during booking transaction
+
+**Phase 2 (Medium Scale - Single DB with Read Replicas):**
+- **Pessimistic Locking** for writes (seat booking)
+- Read replicas for browsing available seats
+- Distributed Cache (Redis) for seat availability
+
+**Phase 3 (Large Scale - Sharded DBs by Theater/Region):**
+- **Distributed Locks** (Redis) for temporary seat reservation
+- **Database Pessimistic Locking** for final booking
+- Saga Pattern if booking spans services (payment, notification)
+
+```java
+// Phase 1: Simple pessimistic locking
+@Transactional
+public void bookSeat(String seatId, String userId) {
+    Seat seat = seatRepository.lockAndFind(seatId);
+    if (seat.isAvailable()) {
+        seat.book(userId);
+    }
+}
+
+// Phase 3: Distributed lock + Saga
+public void bookSeatDistributed(String seatId, String userId) {
+    // Step 1: Acquire distributed lock for temporary hold
+    if (distributedLock.tryLock("seat_" + seatId, 300)) { // 5 min hold
+        try {
+            // Step 2: Reserve seat in database
+            Seat seat = seatRepository.lockAndFind(seatId);
+            seat.reserve(userId);
+            
+            // Step 3: Process payment (saga)
+            sagaOrchestrator.processBooking(seatId, userId);
+            
+        } finally {
+            distributedLock.unlock("seat_" + seatId);
+        }
+    }
+}
+```
+
+### Scenario 2: E-commerce Platform
+
+**Architecture:** Microservices with Multiple Databases
+
+**Services:**
+- Order Service (Order DB)
+- Payment Service (Payment DB)
+- Inventory Service (Inventory DB - sharded by product)
+- Shipping Service (Shipping DB)
+
+**Recommended Approach:**
+- **Saga Pattern (Orchestration)** for order processing workflow
+- **Distributed Locks (etcd)** for inventory coordination across shards
+- **CQRS** for product catalog (write to primary, read from optimized read models)
+- **Event Sourcing** for order history and audit trail
+
+```java
+// Saga Orchestrator
+@Service
+public class OrderOrchestrator {
+    
+    @Transactional
+    public OrderResult processOrder(OrderRequest request) {
+        // Create saga instance
+        Saga saga = sagaFactory.create("ORDER_PROCESSING");
+        
+        saga.addStep(
+            // Forward transaction
+            () -> orderService.createOrder(request),
+            // Compensation
+            (orderId) -> orderService.cancelOrder(orderId)
+        );
+        
+        saga.addStep(
+            () -> paymentService.processPayment(saga.getOrderId(), request.getAmount()),
+            (paymentId) -> paymentService.refund(paymentId)
+        );
+        
+        saga.addStep(
+            () -> inventoryService.reserveItems(saga.getOrderId(), request.getItems()),
+            (reservationId) -> inventoryService.releaseItems(reservationId)
+        );
+        
+        saga.addStep(
+            () -> shippingService.schedule(saga.getOrderId()),
+            (shippingId) -> shippingService.cancel(shippingId)
+        );
+        
+        return saga.execute();
+    }
+}
+```
+
+### Scenario 3: Banking System
+
+**Architecture:** Multiple Backend + Sharded Databases (by account range or region)
+
+**Critical Requirement:** Strong consistency, ACID guarantees
+
+**Recommended Approach:**
+- **Database Pessimistic Locking** within same shard
+- **Two-Phase Commit** for cross-shard transfers (unavoidable)
+- **Distributed Locks (ZooKeeper)** for coordination
+- **Event Sourcing** for audit trail (regulatory requirement)
+
+```java
+// Same-shard transfer: Simple pessimistic locking
+@Transactional
+public void transferWithinShard(String fromAccount, String toAccount, BigDecimal amount) {
+    Account from = accountRepository.lockAndFind(fromAccount);
+    Account to = accountRepository.lockAndFind(toAccount);
+    
+    from.debit(amount);
+    to.credit(amount);
+    
+    // Event sourcing for audit
+    eventStore.append(new TransferCompletedEvent(from.getId(), to.getId(), amount));
+}
+
+// Cross-shard transfer: Two-Phase Commit (necessary evil)
+@Transactional
+public void transferAcrossShards(String fromAccount, String toAccount, BigDecimal amount) {
+    // Use distributed transaction coordinator
+    GlobalTransaction gtx = transactionManager.begin();
+    
+    try {
+        // Phase 1: Prepare both databases
+        Database fromDB = getDatabaseForAccount(fromAccount);
+        Database toDB = getDatabaseForAccount(toAccount);
+        
+        fromDB.prepare(() -> debitAccount(fromAccount, amount));
+        toDB.prepare(() -> creditAccount(toAccount, amount));
+        
+        // Phase 2: Commit
+        gtx.commit();
+        
+        // Event sourcing
+        eventStore.append(new CrossShardTransferEvent(fromAccount, toAccount, amount));
+        
+    } catch (Exception e) {
+        gtx.rollback();
+        throw new TransferFailedException(e);
+    }
+}
+```
+
+### Scenario 4: Social Media Feed
+
+**Architecture:** Microservices with Multiple Databases + Caching Layer
+
+**Characteristics:** Read-heavy (99% reads), eventual consistency acceptable
+
+**Recommended Approach:**
+- **CQRS + Event Sourcing** for feed generation
+- **Optimistic Locking** for user posts (low contention)
+- **No distributed locks needed** (eventual consistency OK)
+- **Saga Pattern (Choreography)** for content moderation workflow
+
+```java
+// Write side (Command): Create post
+@Service
+public class PostCommandService {
+    
+    public void createPost(PostRequest request) {
+        // Optimistic locking for user posts
+        Post post = new Post(request);
+        post.setVersion(0);
+        
+        postRepository.save(post);
+        
+        // Publish event for read model update
+        eventBus.publish(new PostCreatedEvent(post.getId(), post.getContent(), post.getAuthorId()));
+    }
+}
+
+// Read side (Query): Generate feed
+@Service
+public class FeedQueryService {
+    
+    @EventHandler
+    public void onPostCreated(PostCreatedEvent event) {
+        // Update read model asynchronously
+        List<String> followers = followerService.getFollowers(event.getAuthorId());
+        
+        for (String follower : followers) {
+            // Update each follower's feed cache
+            feedCache.addToFeed(follower, event.getPostId());
+        }
+    }
+    
+    public Feed getUserFeed(String userId) {
+        // Read from optimized cache/read model
+        return feedCache.getFeed(userId);
+    }
+}
+```
+
+## Performance Characteristics
+
+### Latency Comparison (Approximate)
+
+| Mechanism | Average Latency | Use Case |
+|---|---|---|
+| Code-level Optimistic (AtomicReference) | < 1 μs | In-memory counters |
+| Code-level Pessimistic (synchronized) | < 10 μs | In-memory critical sections |
+| Database Optimistic Locking | 1-10 ms | Low-contention updates |
+| Database Pessimistic Locking | 5-20 ms | High-contention updates |
+| Distributed Locks (Redis) | 1-5 ms | Cross-server coordination |
+| Distributed Locks (ZooKeeper) | 10-50 ms | Strong consistency needs |
+| Distributed Locks (etcd) | 10-50 ms | Cloud-native coordination |
+| Two-Phase Commit | 50-200 ms | Cross-database ACID |
+| Saga Pattern | 100-500 ms | Cross-service workflows |
+| CQRS Read | 1-10 ms | Reading from read model |
+| CQRS Write | 50-200 ms | Writing to event store |
+
+## Common Anti-Patterns to Avoid
+
+#### ❌ Anti-Pattern 1: Using 2PC Everywhere in Microservices
+
+**Problem:** Kills availability and scalability
+
+**Solution:** Use Saga Pattern instead
+
+#### ❌ Anti-Pattern 2: No Timeout on Distributed Locks
+
+**Problem:** Deadlocks when process crashes
+
+**Solution:** Always set TTL on locks
+
+#### ❌ Anti-Pattern 3: Pessimistic Locking for Read-Heavy Workloads
+
+**Problem:** Blocks readers unnecessarily
+
+**Solution:** Use Optimistic Locking or CQRS
+
+#### ❌ Anti-Pattern 4: Optimistic Locking for High-Contention Resources
+
+**Problem:** Too many retries, poor performance
+
+**Solution:** Use Pessimistic Locking or Distributed Locks
+
+#### ❌ Anti-Pattern 5: Using Code-Level Locks in Multi-Server Setup
+
+**Problem:** Locks don't work across servers
+
+**Solution:** Use Database-Level Locking or Distributed Locks
+
+#### ❌ Anti-Pattern 6: Not Handling Partial Failures in Saga
+
+**Problem:** Inconsistent state, no compensation
+
+**Solution:** Design idempotent compensating transactions
+
+#### ❌ Anti-Pattern 7: Strong Consistency Everywhere
+
+**Problem:** Sacrifices availability and performance
+
+**Solution:** Use eventual consistency where acceptable (CQRS)
+
+## Summary: Quick Reference Guide
+
+| Your Situation | Choose This | Why |
+|---|---|---|
+| Single server, high contention | Pessimistic Locking (DB) | Simple, effective, strong consistency |
+| Single server, low contention | Optimistic Locking | Better performance, less blocking |
+| Multiple servers, single DB, critical data | Pessimistic Locking (DB) | Works across servers, strong consistency |
+| Multiple servers, single DB, high throughput | Optimistic Locking (DB) | High concurrency, retry on conflict |
+| Multiple servers, multiple DBs, cross-DB transaction | Saga Pattern | Avoids 2PC complexity, fault-tolerant |
+| Microservices, workflow coordination | Saga Pattern (Orchestration) | Clear workflow, easy to monitor |
+| Microservices, event-driven | Saga Pattern (Choreography) + Event Sourcing | Loose coupling, scalable |
+| Need temporary resource reservation | Distributed Locks (Redis) | Fast, with automatic expiration |
+| Need high-reliability coordination | Distributed Locks (ZooKeeper/etcd) | Strong consistency, fault-tolerant |
+| Read-heavy system | CQRS + Event Sourcing | Optimized read models, scales reads |
+| Financial system, cross-shard | Two-Phase Commit (reluctantly) | Only when ACID is non-negotiable |
+| Need audit trail | Event Sourcing | Complete history of all changes |
+
+## Final Recommendations
+
+1. **Start Simple:** Use the simplest approach that meets your requirements. Don't use Saga if a database transaction suffices.
+
+2. **Scale Gradually:** 
+   - Begin with Pessimistic/Optimistic Locking
+   - Add Distributed Locks when you scale horizontally
+   - Adopt Saga Pattern when you move to microservices
+   - Implement CQRS when read/write patterns diverge
+
+3. **Match Pattern to Architecture:**
+   - Single DB → Pessimistic/Optimistic Locking
+   - Multiple DBs → Distributed Locks + Saga
+   - Microservices → Saga + Event Sourcing + CQRS
+
+4. **Consider Trade-offs:**
+   - Strong consistency vs. Availability (CAP theorem)
+   - Latency vs. Consistency
+   - Complexity vs. Scalability
+
+5. **Monitor and Adapt:** Measure actual contention, latency, and throughput. Change approaches based on real data.
+
+6. **Prepare for Failure:** Always design for partial failures, network partitions, and system crashes. This is not optional in distributed systems.
+
