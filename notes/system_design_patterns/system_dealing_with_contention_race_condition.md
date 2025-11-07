@@ -1,4 +1,4 @@
-# System Dealing With Contention / Race Condition 
+# System Dealing With Contention / Race Condition
 
 - [Context: Race Condition](#context-race-condition)
 - [Database-Level Locking (Pessimistic Concurrency Control)](#database-level-locking-pessimistic-concurrency-control)
