@@ -674,3 +674,67 @@ Writes are **processed asynchronously** using **message queues, event-driven sys
 | **Write Latency** | Medium (sharding logic overhead) | Low (optimized storage engines) | High (delayed writes) | Very low (writes are queued) |
 | **Database Load** | Distributed across shards | Optimized for writes | Reduced due to batching | Reduced due to async writes |
 | **Complexity** | High (managing shards, routing queries) | Medium-High (choosing right DB) | Medium (batching logic required) | High (queue management, retries, event handling) |
+
+# Common Deep Dives
+
+Interviewers love to test your understanding of write scaling edge cases and operational challenges. Here are some of the most common follow-up questions:
+
+## **How do you handle resharding when you need to add more shards?**
+
+This is the classic operational challenge with sharding. You started with 8 shards, but now you need 16. How do you migrate data without downtime?
+
+The naive approach is to take the system offline, rehash all data, and move it to new shards. But this creates hours of downtime for large datasets.
+
+Production systems use gradual migration which targets writes to both locations (e.g. the shard we're migrating from and the shard we're migrating to). This allows us to migrate data gradually while maintaining availability.
+
+Note: *The dual-write phase ensures no data is lost during migration. You write to both old and new shards, but read with preference for the new shard. This allows you to migrate data gradually while maintaining availability.*
+
+## What happens when you have a hot key that's too popular for even a single shard?
+
+We talked earlier about how we need to spread load evenly across our shards. Sometimes, in spite of even the best choices around keys, a shard can still have a disproportionate traffic pointed at it. Consider a viral tweet that receives 100,000 likes per second. Even though we've spread out our tweets evenly across our shards, this tweet may still cause us problems! Even dedicating an entire shard to this single tweet isn't enough.
+
+We have two major options for handling this:
+
+### Split All Keys
+
+The first option is to split all keys a fixed k number of times. This is a pretty big hammer, but it's the simplest solution. Instead of having each tweet's likes be stored on a single shard, we can instead store them across multiple shards.
+
+For the **post1Likes** key, we can have **post1Likes-0**, **post1Likes-1**, **post1Likes-2**, all the way through to **post1Likes-k-1**. This means that each shard will only have a subset of the data for a given post, but the write volume for a given shard for a given post is reduced by k times.
+
+This has some big downsides:
+
+- By doing so we're both increasing the size of our overall dataset by k times.
+- We've also multiplied the read volume by k. In order to get the number of likes for a given post, we need to reach postId-0, postId-1, postId-2, all the way through to postId-k-1.
+
+But if a small k brings our workload comfortably back into line with our database's write capacity, we've solved our problem!
+
+### Split Hot Keys Dynamically
+
+Another solution is breaking the hot key into multiple sub-keys dynamically based on whether the key is hot or not.
+
+For the viral tweet example, you might split the like count across 100 sub-keys, each handling 1,000 likes per second. When reading, you aggregate the counts from all sub-keys.
+
+Both of these approaches work for metrics that can be aggregated (likes, views, counts, balances) but don't work for data that must remain atomic (user profiles). Fortunately, the latter category is rarely under the same type of write pressure as the former.
+
+Importantly, both readers and writers need to be able to agree on which keys are hot for this to work. If writers are spreading writes across multiple sub-keys, but readers aren't reading from all sub-keys, we have a problem!
+
+We have two main solutions here:
+
+1. We can have the readers *always* check all the sub-keys. This means the same read amplification as the key split approach, but it's simple to implement and easy to understand. When a writer detects a key may be hot (they can keep local statistics), they can conditionally write to the sub-keys for that key.
+2. Another, more burdensome approach is to have the writers *announce* the split to the readers. All readers would need to receive this announcement before the split is executed. This is more complex to implement and understand, but it's more efficient and keeps readers from reading splits that don't exist.
+
+Note: *Most production systems use the first approach because it's simpler and the overhead of checking for sub-keys is minimal compared to the performance gain from handling hot keys properly. Avoid overengineering your solution in the interview!*
+
+# Conclusion
+
+Write scaling comes down to four fundamental strategies that work together: **vertical scaling and database choices**, **sharding and partitioning**, **queues and load shedding**, and **batching and multi-step reducers**. The most successful interviews don't overcomplicate these concepts, they look for places where they are *required* and apply them strategically.
+
+**Note:** *An easy mistake to make is to employ write scaling strategies when no scaling is necessary! If you see something that looks like it might be a bottleneck, that's a good time to use some quick back-of-the-envelope math to see if it's worth the effort.*
+
+Sharding and partitioning is a great place to start when you're trying to scale your system. It's a simple strategy that can give you a lot of bang for your buck, and most interviews are going to be expecting it.
+
+If you're dealing with high volume analytics or numeric data, batching and hierarchical aggregation can give you immediate 5-10x improvements.
+
+Finally, queues and load shedding are great tools when requirements allow for async processing or even dropping requests. Keep them in mind as you're navigating requirements to see if they're a good fit.
+
+The key insight is that write scaling is about **reducing throughput per component**. Whether you're spreading 10,000 writes across 10 shards, smoothing bursts through queues, or batching them into 100 bulk operations, you're applying the same principle: make each individual component handle manageable load.
