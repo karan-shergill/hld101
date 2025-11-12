@@ -1,4 +1,4 @@
-# Manage Write Heavy System
+# Systems that need to scale WRITEs
 
 - [Sharding (Horizontal Partitioning)](#sharding-horizontal-partitioning)
   - [Why Use Sharding?](#why-use-sharding)
