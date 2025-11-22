@@ -44,7 +44,7 @@ Let's walk through a request from start to finish. Incoming requests come into t
 5. API Gateway transforms the response and returns it to the client
 6. Optionally cache the response for future requests
 
-![api_gateway](/technologies/images/api_gateway.png)
+![api_gateway](/notes/technologies/images/api_gateway.png)
 
 ### 1) Request Validation
 

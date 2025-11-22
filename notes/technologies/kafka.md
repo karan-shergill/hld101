@@ -219,7 +219,7 @@ Defines **how long Kafka keeps events** in a topic.
 - ZooKeeper keeps track of which broker is the leader for `orders` partition 0.
 - In modern Kafka (KRaft), this coordination is done internally without ZooKeeper.
 
-![kafka_terms_relationship](/technologies/images/kafka_terms_relationship.png)
+![kafka_terms_relationship](/notes/technologies/images/kafka_terms_relationship.png)
 
 ## Kafka as message queue or a stream
 
@@ -266,7 +266,7 @@ Once a message is published to the designated partition, Kafka ensures its durab
 
 Last up, consumers read messages from Kafka topics using a pull-based model. Unlike some messaging systems that push data to consumers, Kafka consumers actively poll the broker for new messages at intervals they control. As explained by [Apache Kafka's official documentation](https://kafka.apache.org/documentation.html#design_pull), this pull approach was a deliberate design choice that provides several advantages: it lets consumers control their consumption rate, simplifies failure handling, prevents overwhelming slow consumers, and enables efficient batching.
 
-![kafka_architecture](/technologies/images/kafka_architecture.png)
+![kafka_architecture](/notes/technologies/images/kafka_architecture.png)
 
 ## When to use Kafka in your interview
 
