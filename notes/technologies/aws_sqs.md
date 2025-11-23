@@ -29,12 +29,8 @@ Read: [**Amazon Simple Queue Service (SQS): A Comprehensive Tutorial**](https://
     3. Supports very high throughput (nearly unlimited transactions per second).
     4. Suitable for background tasks, notifications, log processing, and any workload where ordering does not matter.
 2. FIFO Queue
-    1. Guarantees exactly-once processing (no duplicates).
-
-   ii. Ensures messages are processed in the exact order they are sent.
-
-   iii. Throughput is limited to 300 messages per second (or 3,000 with batching).
-
-   iv. Supports message grouping using MessageGroupId for parallel ordered streams.
-
-   v. Suitable for financial transactions, order management, inventory updates, and any workflow where strict ordering matters.
+    1. Guarantees exactly-once processing (no duplicates). 
+    2. Ensures messages are processed in the exact order they are sent. 
+    3. Throughput is limited to 300 messages per second (or 3,000 with batching). 
+    4. Supports message grouping using MessageGroupId for parallel ordered streams. 
+    5. Suitable for financial transactions, order management, inventory updates, and any workflow where strict ordering matters.
