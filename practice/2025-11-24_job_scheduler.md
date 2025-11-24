@@ -1,5 +1,10 @@
 # Job Scheduler
 
+- [Functional requirements](#functional-requirements)
+- [Non-Functional Requirements](#non-functional-requirements)
+- [APIs](#apis)
+- [ChatGPT HLD Review](#chatgpt-hld-review)
+
 Time taken: 90 Minutes
 
 ![Job Scheduler Architecture](images/24-11-2025-job_scheduler.png)
