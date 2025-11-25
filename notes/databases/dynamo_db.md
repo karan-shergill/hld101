@@ -25,3 +25,39 @@
 | Read Consistency | Strong + Eventual | Eventual only |
 | Scaling | Shares throughput with table | Scales independently |
 | Use Case | Need different sorting for same entity | Need different access patterns |
+
+## Solutions to DynamoDB Hot Partitions
+| Solution                           | When to Use                               |
+| ---------------------------------- | ----------------------------------------- |
+| **Random write sharding**          | Most common & generic fix                 |
+| **Time-based sharding**            | Time-series + scheduler use cases         |
+| **Hash-based bucketing**           | User-based or high-volume workloads       |
+| **GSIs**                           | Move load away from hot PK                |
+| **SQS buffering**                  | Burst writes                              |
+| **Auto-scaling & partition split** | Secondary mitigation                      |
+| **Streams for materialized view**  | Complex systems needing unified read view |
+
+
+## What can replace DynamoDB? Alternative
+Cassandra or Google Bigtable — both use the same distributed wide-column model.
+
+Cassandra uses Partition Key (= DynamoDB PK) and Clustering Columns (= DynamoDB Sort Key).
+But Cassandra does not have LSIs or GSIs.
+
+1. DynamoDB has:
+    - PK/SK
+    - LSI
+    - GSI
+    - Streams
+    - Serverless auto-scaling
+2. Cassandra has:
+    - Partition Key
+    - Clustering Columns
+    - Tunable consistency
+    - You must create multiple tables manually for GSIs
+    - No LSIs/GSIs
+    - Big operational overhead
+3. Basic concepts are similar:
+    - DynamoDB Sort Key = Cassandra Clustering Column
+    - DynamoDB PK = Cassandra Partition Key
+    - Both require query-based modeling
