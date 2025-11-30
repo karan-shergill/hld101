@@ -9,9 +9,9 @@
 ## Area to focus
 
 1. DB design - query pattern and keys of DBs
-2. Timely pick of a job by worker
-3. Worker coordination
-4. Priority tasks
+2. How can our system(worker) timely pick of a job 
+3. Worker coordination - how will that happen?
+4. Priority tasks - how to handle this?
 5. Retry & job failure flow
 6. Ensure at-least-once execution of jobs
 
