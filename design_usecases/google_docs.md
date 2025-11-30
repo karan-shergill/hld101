@@ -22,7 +22,7 @@
 1. Algorithms for realtime conflict resolution OT(Operational Transformation) & CRDT (Conflict-free Replicated Data Types)
    1. OT(Operational Transformation): https://youtu.be/OHd8M54-mNQ
    2. CRDT (Conflict-free Replicated Data Types): https://youtu.be/UEA9Ti2TdrQ
-2. If a service has multiple instance, how to handle them?
+2. If a service has multiple instance, how to handle communication between them?
 
 ## Design Decision
 
