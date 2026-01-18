@@ -9,7 +9,7 @@
 1. How will you push live comments to all users?
 2. How will you make sure new comments are delivered in real-time?
 3. How will you ensure millions of users get live comments in real time?
-4. 
+
 ## New Learning
 1. API Pagination Design
     1. https://youtu.be/14K_a2kKTxU
