@@ -1,5 +1,17 @@
 # Design Usecases
 
+- [Job Scheduler](#job-scheduler)
+- [Google Docs](#google-docs)
+- [Mouse Pointer Tracking](#mouse-pointer-tracking)
+- [Stripe Payment Processor](#stripe-payment-processor)
+- [Live Video Comments](#live-video-comments)
+- [Ad Click Aggregator](#ad-click-aggregator)
+- [Web Crawler System](#web-crawler-system)
+- [YouTube Video Streaming](#youtube-video-streaming)
+- [Distributed Cache](#distributed-cache)
+- [Stock Broker Application](#stock-broker-application)
+- [Uber](#uber)
+
 ## Job Scheduler
 ![Job Scheduler](../practice/images/24-11-2025-job_scheduler.png)
 
@@ -29,3 +41,6 @@
 
 ## Stock Broker Application
 ![Stock Broker Application](../practice/images/stock_broker_application.png)
+
+## Uber
+![Uber](../practice/images/uber.png)
