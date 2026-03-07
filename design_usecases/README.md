@@ -12,6 +12,7 @@
 - [Stock Broker Application](#stock-broker-application)
 - [Uber](#uber)
 - [Instagram Feed](#instagram-feed)
+- [Leetcode](#leetcode)
 
 ## Job Scheduler
 ![Job Scheduler](../practice/images/24-11-2025-job_scheduler.png)
@@ -48,3 +49,6 @@
 
 ## Instagram Feed
 ![Instagram Feed](../practice/images/instagram-feed.png)
+
+## Leetcode
+![Leetcode](../practice/images/leetcode.png)
