@@ -1,5 +1,7 @@
 # Distributed Cache
 
+![Distributed Cache](../practice/images/distributed_cache.png)
+
 ## Source
 1. https://www.hellointerview.com/learn/system-design/problem-breakdowns/distributed-cache
 2. https://medium.com/system-design-concepts/distributed-cache-system-design-9560f7dd07f2

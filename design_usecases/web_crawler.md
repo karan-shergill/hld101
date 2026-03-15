@@ -1,5 +1,7 @@
 # Web Crawler
 
+![Web Crawler System](../practice/images/web_crawler_system.png)
+
 ## Source
 
 1. https://www.hellointerview.com/learn/system-design/problem-breakdowns/web-crawler

@@ -1,5 +1,7 @@
 # LeetCode
 
+![Leetcode](../practice/images/leetcode.png)
+
 ## Source
 1. https://youtu.be/NPg2iRtCr-I
 2. https://youtu.be/1xHADtekTNg

@@ -1,5 +1,7 @@
 # Stripe
 
+![Stripe Payment Processor](../practice/images/stripe_payment_processor.png)
+
 ## Source
 
 1. https://www.hellointerview.com/learn/system-design/problem-breakdowns/payment-system

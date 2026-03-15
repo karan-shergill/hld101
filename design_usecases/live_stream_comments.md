@@ -1,5 +1,7 @@
 # Live Video Comments (FB/ YouTube/ Instagram/ Twitter)
 
+![Live Video Comments](../practice/images/live_video_comments.png)
+
 ## Source
 1. https://www.hellointerview.com/learn/system-design/problem-breakdowns/fb-live-comments
 2. https://systemdesign.one/live-comment-system-design/

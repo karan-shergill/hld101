@@ -1,5 +1,7 @@
 # Price Tracking Service
 
+![Price Tracking Service](../practice/images/price_tracking_service.png)
+
 ## Source
 1. https://www.hellointerview.com/learn/system-design/problem-breakdowns/camelcamelcamel
 2. https://medium.com/@shubhambhama/price-tracking-system-a-technical-deep-dive-47b8fa44cfea

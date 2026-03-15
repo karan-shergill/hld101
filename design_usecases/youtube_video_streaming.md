@@ -1,5 +1,7 @@
 # YouTube Video Streaming
 
+![YouTube Video Streaming](../practice/images/youtube_video_streaming_2.png)
+
 ## Source
 1. https://www.hellointerview.com/learn/system-design/problem-breakdowns/youtube
 2. https://youtu.be/jWRW2xGMqSw

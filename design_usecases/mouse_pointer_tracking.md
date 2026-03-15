@@ -1,5 +1,7 @@
 # Mouse Pointer Tracking
 
+![Mouse Pointer Tracking](../practice/images/mouse_pointer_tracking_2.png)
+
 ## Source
 
 1. https://engineeringatscale.substack.com/p/designing-real-time-collaborative

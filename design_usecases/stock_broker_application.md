@@ -1,3 +1,7 @@
+# Stock Broker Application
+
+![Stock Broker Application](../practice/images/stock_broker_application.png)
+
 ## Source
 
 1. https://youtu.be/a5rABvMQ53U

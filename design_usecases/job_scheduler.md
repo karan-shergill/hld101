@@ -1,5 +1,7 @@
 # Job Scheduler 
 
+![Job Scheduler](../practice/images/24-11-2025-job_scheduler.png)
+
 ## Source
 
 1. https://www.hellointerview.com/learn/system-design/problem-breakdowns/job-scheduler

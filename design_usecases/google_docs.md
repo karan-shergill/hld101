@@ -1,5 +1,7 @@
 # Google Docs
 
+![Google Docs](../practice/images/30-11-2025-google_docs_2.png)
+
 ## Source
 
 1. https://www.hellointerview.com/learn/system-design/problem-breakdowns/google-docs

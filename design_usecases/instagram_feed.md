@@ -1,4 +1,6 @@
-# YouTube Video Streaming
+# Instagram Feed
+
+![Instagram Feed](../practice/images/instagram-feed.png)
 
 ## Source
 1. https://www.hellointerview.com/learn/system-design/problem-breakdowns/instagram

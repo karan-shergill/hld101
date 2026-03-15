@@ -1,5 +1,7 @@
 # Uber
 
+![Uber](../practice/images/uber.png)
+
 ## Source
 1. https://youtu.be/lsKU38RKQSo
 2. https://www.hellointerview.com/learn/system-design/problem-breakdowns/uber

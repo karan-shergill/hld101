@@ -1,5 +1,7 @@
 # Ad Click Aggregator
 
+![Ad Click Aggregator](../practice/images/ad_click_aggregator.png)
+
 ## Source
 
 1. https://www.hellointerview.com/learn/system-design/problem-breakdowns/ad-click-aggregator
