@@ -13,6 +13,7 @@
 - [Uber](#uber)
 - [Instagram Feed](#instagram-feed)
 - [Leetcode](#leetcode)
+- [Price Tracking Service](#price-tracking-service)
 
 ## Job Scheduler
 ![Job Scheduler](../practice/images/24-11-2025-job_scheduler.png)
@@ -52,3 +53,6 @@
 
 ## Leetcode
 ![Leetcode](../practice/images/leetcode.png)
+
+## Price Tracking Service
+![Price Tracking Service](../practice/images/price_tracking_service.png)
