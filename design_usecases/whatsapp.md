@@ -1,7 +1,5 @@
 # WhatsApp System Design
 
-# YouTube Video Streaming
-
 ![whatsapp](../practice/images/whatsapp.png)
 
 ## Source
